@@ -1,1 +1,2 @@
-# packit-polygons
+# Rozgrywane pakowanie figur geometrycznych
+
