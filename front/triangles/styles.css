@@ -1,0 +1,46 @@
+/* Grid setup */
+.triangle-grid    { 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center;
+    --s: 100px;
+    --m: 1px;
+    --f: calc(1.732 * var(--s) + 4 * var(--m)  - 1px);
+}
+.triangle-row     { 
+    display: flex;
+    justify-content: center;
+}
+.triangle-row > * {
+    display: grid;
+    place-items: center
+}
+
+/* Triangle setup */
+/* .triangle-grid {
+        --triangle-size: calc(8.5vw + 0rem); 
+        } */
+
+.triangle-row > :nth-child(odd)  { 
+    clip-path: polygon(50%   0%, 0% 100%, 100% 100%);  
+} /* up   */
+.triangle-row > :nth-child(even) { 
+    clip-path: polygon(50% 100%, 0%   0%, 100%   0%);   
+} /* Down */
+
+.triangle-cell {
+    width : calc(var(--s) + 2 * var(--m));
+    height: var(--s);
+    margin: 0 calc(-1 * var(--s)/4);
+    background-color: aqua;
+    margin: 0 calc(-1 * var(--s) / 4 + var(--m) / 2);
+    margin-bottom: 2px; 
+    /* border : 1px solid black; */
+}
+
+/* Action */
+.triangle-row > :hover { background-color: tomato }
+
+ 
+
+        

@@ -1,0 +1,35 @@
+/* hexagons */
+.hexagonal-grid { 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    --s: 100px;
+    --m: 1px;
+    --f: calc(1.732 * var(--s) + 4 * var(--m)  - 1px);
+}
+.hexagonal-row {
+        display: flex; 
+    justify-content: center; 
+}
+.hexagonal-row > * { 
+    display: grid; 
+    place-items: center 
+}
+
+.hexagonal-grid { --hexagonal-size: 3em; /*  y=mx+b for points p1(160,36) p2(1920,256) */ }
+
+.hexagonal-cell {
+    width: var(--s);
+    margin: var(--m);
+    height: calc(var(--s) * 1.1547);
+    margin-bottom: calc(var(--m) - var(--s)*0.2885); 
+    /* display: inline-block; */
+    /* font-size: initial; */
+    clip-path: polygon(0% 25%, 0% 75%, 50% 100%, 100% 75%, 100% 25%, 50% 0%);
+    background-color: aqua;
+    /* font; */
+}
+
+.hexagonal-row > :hover {
+    background-color: tomato;
+}
