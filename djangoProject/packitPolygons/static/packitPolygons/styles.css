@@ -1,0 +1,113 @@
+main {
+    display: grid;
+    /*gap: 20px;*/
+    /*padding: 20px;*/
+    justify-content: center;
+}
+div {
+    display: flex;
+    justify-content: center;
+}
+.hexagonal-grid {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    --s: 100px;
+    --m: 1px;
+    --f: calc(1.732 * var(--s) + 4 * var(--m)  - 1px);
+}
+.hexagonal-row {
+    display: flex;
+    justify-content: center;
+}
+.hexagonal-row > * {
+    display: grid;
+    place-items: center
+}
+
+.hexagonal-grid { --hexagonal-size: 3em; /*  y=mx+b for points p1(160,36) p2(1920,256) */ }
+
+.hexagonal-cell {
+    width: var(--s);
+    margin: var(--m);
+    height: calc(var(--s) * 1.1547);
+    margin-bottom: calc(var(--m) - var(--s)*0.2885);
+     display: inline-block;
+    /* font-size: initial; */
+    clip-path: polygon(0% 25%, 0% 75%, 50% 100%, 100% 75%, 100% 25%, 50% 0%);
+    background-color: aqua;
+    /* font; */
+}
+
+.hexagonal-row > :hover {
+    background-color: tomato;
+}
+
+/* Grid setup */
+.triangular-grid    {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    --s: 100px;
+    --m: 1px;
+    --f: calc(1.732 * var(--s) + 4 * var(--m)  - 1px);
+}
+.triangular-row     {
+    display: flex;
+    justify-content: center;
+}
+.triangular-row > * {
+    display: grid;
+    place-items: center
+}
+
+
+.triangular-row > :nth-child(odd)  {
+    clip-path: polygon(50%   0%, 0% 100%, 100% 100%);
+} /* up   */
+.triangular-row > :nth-child(even) {
+    clip-path: polygon(50% 100%, 0%   0%, 100%   0%);
+} /* Down */
+
+.triangular-cell {
+    width : calc(var(--s) + 2 * var(--m));
+    height: var(--s);
+    /*margin: 0 calc(-1 * var(--s)/4);*/
+    background-color: aqua;
+    margin: 0 calc(-1 * var(--s) / 4 + var(--m) / 2);
+    margin-bottom: 2px;
+    /* border : 1px solid black; */
+}
+
+/* Action */
+.triangular-row > :hover { background-color: tomato }
+
+header {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    background-color: #f8f9fa;
+    /*padding: 10px;*/
+    /*box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);*/
+}
+
+.app-footer  {
+    margin-top: 10px;
+}
+
+.dim-input {
+    width: 30px;
+    height: 20px;
+    font-size: 12px;
+    text-align: center;
+}
+
+td {
+    /*display: grid;*/
+    /*flex-direction: column;*/
+    justify-content: center;
+}
+
+h2, h3 {
+    text-align: center;
+}

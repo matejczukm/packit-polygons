@@ -1,0 +1,48 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>packit-polygons</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="{% static 'packitPolygons/script.js' %}"></script>
+
+    <link style rel="stylesheet" href="{%  static 'packitPolygons/styles.css' %}">
+</head>
+<body onload="loadBoard()">
+<header>
+{#    {%  include "blog/header.html" %}#}
+    <h1 style="justify-content: center">Polygonal PackIt</h1>
+    <table class="header-table">
+        <tr>
+            <td>
+                <button onclick="window.location.href='{% url 'index' %}'">Triangular Mode</button>
+            </td>
+            <td>
+                <button onclick="window.location.href='{% url 'hexagon' %}'">Hexagonal Mode</button>
+            </td>
+        </tr>
+    </table>
+</header>
+<main>
+    {%  block content %}
+        dummy
+    {%  endblock %}
+<div class="app-footer">
+    <table>
+        <tr>
+            <td><h2>Current turn: {{ current_turn }}</h2></td>
+        </tr>
+        <tr>
+            <td><h3>Board dimension:</h3></td>
+            <td><label>
+                <input id="dim-input" type="number" min="3" max="10" value="4">
+            </label></td>
+            <td><button class="reset-button" onclick="generateGrid()">Reset</button></td>
+        </tr>
+    </table>
+</div>
+</main>
+
+</body>
+</html>

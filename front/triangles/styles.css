@@ -41,6 +41,10 @@
 /* Action */
 .triangle-row > :hover { background-color: tomato }
 
- 
+.app-header {
+    display: flex; 
+    justify-content: center; 
+    border: black dotted;
+}
 
         
