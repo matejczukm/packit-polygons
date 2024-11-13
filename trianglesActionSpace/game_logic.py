@@ -79,7 +79,6 @@ def place_polygon(board, polygon):
     '''
     Places the polygon on the board by adding the NumPy array representation of the polygon to the board.
 
-
     Args:
         board (numpy.ndarray): A NumPy array representing the current state of the board.
         polygon (numpy.ndarray): A NumPy array representing the polygon to be placed on the board.
@@ -93,10 +92,21 @@ def place_polygon(board, polygon):
     return board + polygon
 
 
-def play(board_size):
-    board = dc.convert_triangle_to_numpy_array(
+def get_board(board_size):
+    return dc.convert_triangle_to_numpy_array(
         pc.get_triangle_matrix(board_size)
     )
+
+
+def play(board_size):
+    '''
+    Initiates a terminal-based gameplay session for a triangular board game.
+
+    Args:
+        board_size (int): The size of the board.
+    
+    '''
+    board = get_board(board_size)
     turn = 1
     moves = get_possible_moves(board, turn)
     while moves:
@@ -118,5 +128,5 @@ def play(board_size):
     return
 
 if __name__ == '__main__':
-    play(4)
+    play(15)
 
