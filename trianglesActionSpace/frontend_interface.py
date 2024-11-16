@@ -4,14 +4,32 @@ import data_convertions as dc
 
 
 def start_game(board_size):
+    """
+
+    Args:
+        board_size (int):
+
+    """
     board = get_board(board_size)
     possible_moves = get_possible_moves(board, 1)
     return {
-        'board' : dc.convert_numpy_array_to_triangle(board),
-        'moves' : [str(dc.convert_numpy_array_to_triangle(move)) for move in possible_moves]
+        'board': dc.convert_numpy_array_to_triangle(board),
+        'moves': [str(dc.convert_numpy_array_to_triangle(move)) for move in possible_moves]
     }
 
-def perfor_move(board, move, turn):
+
+def perform_move(board, move, turn):
+    """
+
+    Args:
+        board (list): Matrix-like representation of the board.
+        move (list): Matrix-like representation of the polygon to be placed.
+        turn (int): The current turn.
+
+    Returns:
+        dict:
+
+    """
     board_np = dc.convert_triangle_to_numpy_array(board)
     move_np = dc.convert_triangle_to_numpy_array(move)
 
@@ -19,8 +37,8 @@ def perfor_move(board, move, turn):
     possible_moves = get_possible_moves(board_np, turn)
 
     return {
-        'board' : dc.convert_numpy_array_to_triangle(board_np),
-        'moves' : [str(dc.convert_numpy_array_to_triangle(move)) for move in possible_moves]
+        'board': dc.convert_numpy_array_to_triangle(board_np),
+        'moves': [str(dc.convert_numpy_array_to_triangle(move)) for move in possible_moves]
     }
 
 

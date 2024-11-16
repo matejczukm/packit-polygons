@@ -26,12 +26,13 @@
 </header>
 <main>
     {%  block content %}
-        dummy
+
     {%  endblock %}
 <div class="app-footer">
     <table>
         <tr>
-            <td><h2>Current turn: {{ current_turn }}</h2></td>
+            <td><h2>Current turn: <span id="turn-span">1</span></h2></td>
+            <td><button class="move-button" onclick="confirmMove()"> Confirm move </button> </td>
         </tr>
         <tr>
             <td><h3>Board dimension:</h3></td>

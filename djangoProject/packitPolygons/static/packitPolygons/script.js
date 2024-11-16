@@ -1,31 +1,62 @@
 let boardMatrix = null;
+let moveMatrix = null;
+let cellsClicked = 0;
+let turn = 1;
 
-function yap(text) {
-    console.log(text);
-}
-
-function onClickCell(row, col) {
-    if(!boardMatrix) {
-        boardMatrix = getBoardMatrix();
+function onClickCell(row, col, cell) {
+    if(!moveMatrix) {
+        moveMatrix = getBoardMatrix();
     }
-    if(boardMatrix[row][col]) {
+    if(moveMatrix[row][col]) {
         alert('Cell already clicked');
         return;
     }
-    yap(`Row: ${row}, col: ${col}`);
-    boardMatrix[row][col] = 1;
-    yap(boardMatrix);
+    cellsClicked ++;
+
+    if (cellsClicked > turn + 1) {
+        alert(`You can click at most ${turn+1} cells`);
+        return;
+    }
+    console.log(`Row: ${row}, col: ${col}`);
+    moveMatrix[row][col] = 1;
+    console.log(moveMatrix);
+    cell.style.backgroundColor = getColorForTurn(turn);
+    cell.innerHTML = turn;
 }
+
+function confirmMove() {
+    turn ++;
+    // moveMatrix = getBoardMatrix();
+    cellsClicked = 0;
+    let turnSpan =  document.getElementById('turn-span');
+    if (turnSpan){
+        turnSpan.innerHTML = String(turn);
+        // console.log('turn span found')
+    }
+}
+
+// function startGame() {
+//     const response = fetch( '/start_game/', {
+//         method: 'POST',
+//         body : JSON.stringify({board_size : getBoardDimension()})
+//         }
+//     );
+//     console.log(response);
+// }
 
 function createCell(className, row, col) {
     let cell = document.createElement("div");
     cell.className = className;
-    cell.id = `${row};${cell}`;
+    cell.id = `${row};${col}`;
     cell.addEventListener('click', () => {
-        onClickCell(row, col);
-        cell.style.backgroundColor = 'orange';
+        onClickCell(row, col, cell);
     });
     return cell;
+}
+
+function getColorForTurn(turn) {
+    const hue = (turn * 137) % 360;
+    return `hsl(${hue}, 70%, 60%)`;
 }
 
 function createRow(className) {
@@ -79,7 +110,7 @@ function generateGrid() {
     } else {
         for (let i=0; i < dim; i++) {
             let row = createRow("triangular-row");
-            for (let j=1; j <= 1 + 2*i; j++) {
+            for (let j=0; j < 1 + 2*i; j++) {
                 row.appendChild(
                     createCell("triangular-cell", i, j)
                 );
@@ -88,7 +119,16 @@ function generateGrid() {
         }
     }
     boardMatrix = getBoardMatrix();
+    moveMatrix = getBoardMatrix();
+    cellsClicked = 0;
+    turn = 1;
     updateSizes();
+    let turnSpan =  document.getElementById('turn-span');
+    if (turnSpan){
+        turnSpan.innerHTML = String(turn);
+        // console.log('turn span found')
+    }
+    // startGame();
 }
 
 function loadBoard() {

@@ -32,8 +32,8 @@ div {
     margin: var(--m);
     height: calc(var(--s) * 1.1547);
     margin-bottom: calc(var(--m) - var(--s)*0.2885);
-     display: inline-block;
-    /* font-size: initial; */
+     /*display: inline-block;*/
+     /*font-size: initial;*/
     clip-path: polygon(0% 25%, 0% 75%, 50% 100%, 100% 75%, 100% 25%, 50% 0%);
     background-color: aqua;
     /* font; */
@@ -73,14 +73,14 @@ div {
     width : calc(var(--s) + 2 * var(--m));
     height: var(--s);
     /*margin: 0 calc(-1 * var(--s)/4);*/
-    background-color: aqua;
+    background-color: #bab1b5;
     margin: 0 calc(-1 * var(--s) / 4 + var(--m) / 2);
     margin-bottom: 2px;
     /* border : 1px solid black; */
 }
 
 /* Action */
-.triangular-row > :hover { background-color: tomato }
+.triangular-row > :hover { background-color: #f5c6d9 }
 
 header {
     display: grid;
