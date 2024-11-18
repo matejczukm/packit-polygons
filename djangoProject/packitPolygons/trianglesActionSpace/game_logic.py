@@ -53,11 +53,8 @@ def get_possible_placements(board, k, turn):
     for polygon in pc.get_all_solutions(k):
         for expanded_polygon in sm.expand_polygon(*polygon, n):
             expanded_polygon = dc.convert_triangle_to_numpy_array(expanded_polygon)
-            # print(k)
-            # print(f'expanded: {expanded_polygon}')
             if is_placement_valid(board, expanded_polygon):
                 result.append(expanded_polygon * turn)
-                # print(k, k)
 
     return result
 

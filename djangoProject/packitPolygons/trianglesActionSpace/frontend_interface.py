@@ -14,7 +14,9 @@ def start_game(board_size):
     possible_moves = get_possible_moves(board, 1)
     return {
         'board': dc.convert_numpy_array_to_triangle(board),
-        'moves': [str(dc.convert_numpy_array_to_triangle(move)) for move in possible_moves]
+        'moves': [
+            json.dumps(dc.convert_numpy_array_to_triangle(move), separators=(',', ': ')) for move in possible_moves
+        ]
     }
 
 
@@ -38,7 +40,10 @@ def perform_move(board, move, turn):
 
     return {
         'board': dc.convert_numpy_array_to_triangle(board_np),
-        'moves': [str(dc.convert_numpy_array_to_triangle(move)) for move in possible_moves]
+        'moves': [
+            json.dumps(dc.convert_numpy_array_to_triangle(move), separators=(',', ': ')) for move in
+            possible_moves
+        ]
     }
 
 
