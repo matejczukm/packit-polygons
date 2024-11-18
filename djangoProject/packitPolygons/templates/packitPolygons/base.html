@@ -11,7 +11,6 @@
 </head>
 <body onload="loadBoard()">
 <header>
-{#    {%  include "blog/header.html" %}#}
     <h1 style="justify-content: center">Polygonal PackIt</h1>
     <table class="header-table">
         <tr>
@@ -25,6 +24,7 @@
     </table>
 </header>
 <main>
+    <h2 id="winner-header"></h2>
     {%  block content %}
 
     {%  endblock %}
