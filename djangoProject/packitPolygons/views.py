@@ -37,3 +37,18 @@ def start_new_game(request):
         data = json.loads(request.body)
         board_size = data['board_size']
         return JsonResponse(start_game(int(board_size)))
+
+
+@csrf_exempt
+def confirm_move(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        # print(data)
+        board = data['board']
+        move = data['move']
+        turn = data['turn']
+        return JsonResponse(perform_move(
+            board=board,
+            move=move,
+            turn=int(turn)
+        ))
