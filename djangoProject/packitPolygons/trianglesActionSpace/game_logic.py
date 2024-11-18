@@ -1,7 +1,7 @@
-import data_convertions as dc
-import size_modifications as sm
-import polygon_creation as pc
-from display import print_numpy_triangle
+from . import data_convertions as dc
+from . import size_modifications as sm
+from . import polygon_creation as pc
+from .display import print_numpy_triangle
 import numpy as np
 
 

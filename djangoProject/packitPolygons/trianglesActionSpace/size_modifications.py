@@ -1,5 +1,5 @@
-import data_convertions as dc
-import polygon_creation as pc
+from . import data_convertions as dc
+from . import polygon_creation as pc
 
 
 def expand_downward(triangle, k):
