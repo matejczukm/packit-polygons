@@ -2,6 +2,8 @@ let boardMatrix = null;
 let moveMatrix = null;
 let cellsClicked = 0;
 let turn = 1;
+let possibleMoves = null;
+let cellBaseColor = '#bab1b5';
 
 function onClickCell(row, col, cell) {
     if(!moveMatrix) {
@@ -17,32 +19,114 @@ function onClickCell(row, col, cell) {
         alert(`You can click at most ${turn+1} cells`);
         return;
     }
-    console.log(`Row: ${row}, col: ${col}`);
-    moveMatrix[row][col] = 1;
-    console.log(moveMatrix);
+    // console.log(`Row: ${row}, col: ${col}`);
+    moveMatrix[row][col] = turn;
+    // console.log(moveMatrix);
+    console.log('Move matrix: ')
+    console.log(JSON.stringify(moveMatrix))
     cell.style.backgroundColor = getColorForTurn(turn);
     cell.innerHTML = turn;
 }
 
-function confirmMove() {
-    turn ++;
-    // moveMatrix = getBoardMatrix();
-    cellsClicked = 0;
-    let turnSpan =  document.getElementById('turn-span');
-    if (turnSpan){
-        turnSpan.innerHTML = String(turn);
-        // console.log('turn span found')
+function revertMove() {
+    for(let i=0; i < moveMatrix.length; i++) {
+        for(let j = 0; j<moveMatrix[i].length; j++) {
+            if (moveMatrix[i][j] === turn) {
+                let cellID = `${i};${j}`;
+                let cell = document.getElementById(cellID);
+                if (boardMatrix[i][j]) {
+                    cell.innerHTML = boardMatrix[i][j];
+                    cell.style.backgroundColor = getColorForTurn(boardMatrix[i][j]);
+                } else {
+                    cell.innerHTML = '';
+                    cell.style.backgroundColor = cellBaseColor;
+                }
+            }
+        }
     }
+    moveMatrix = getBoardMatrix();
+    cellsClicked = 0;
 }
 
-// function startGame() {
-//     const response = fetch( '/start_game/', {
-//         method: 'POST',
-//         body : JSON.stringify({board_size : getBoardDimension()})
-//         }
-//     );
-//     console.log(response);
-// }
+function confirmMove() {
+    // console.log('Possible moves')
+    // console.log(possibleMoves);
+    // console.log('Current move')
+    // console.log(JSON.stringify(moveMatrix))
+    // console.log('Move is valid:')
+    // console.log(possibleMoves.includes(JSON.stringify(moveMatrix)))
+    let moveMatrixJSON = JSON.stringify(moveMatrix);
+    if (!possibleMoves.includes(moveMatrixJSON)) {
+        alert('Not a valid move')
+        revertMove();
+        return;
+    }
+    turn ++;
+    const response = fetch( '/confirm_move/', {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json'
+        },
+        body : JSON.stringify({
+            board : boardMatrix,
+            move : moveMatrix,
+            turn : turn
+        })
+        }
+    )
+    .then(response => {
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+    })
+    .then(data => {
+        console.log("Move confirmed:", data);
+        possibleMoves = data.moves;
+        boardMatrix = data.board;
+        // console.log(data.board)
+        // console.log('Current board', boardMatrix);
+        if(possibleMoves.length > 0) {
+            moveMatrix = getBoardMatrix();
+            cellsClicked = 0;
+            let turnSpan = document.getElementById('turn-span');
+            if (turnSpan) {
+                turnSpan.innerHTML = String(turn);
+            }
+        } else {
+            // alert('Game finished');
+            let winnerHeader = document.getElementById('winner-header');
+            winnerHeader.innerHTML = `Player ${turn % 2 + 1} wins!`
+        }
+    })
+    .catch(error => {
+        console.error("There was an error:", error);
+    });
+}
+
+function startGame() {
+    const response = fetch( '/start_game/', {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json'
+        },
+        body : JSON.stringify({board_size : getBoardDimension()})
+        }
+    )
+    .then(response => {
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+    })
+    .then(data => {
+        console.log("Game started:", data);
+        possibleMoves = data.moves;
+    })
+    .catch(error => {
+        console.error("There was an error:", error);
+    });
+}
 
 function createCell(className, row, col) {
     let cell = document.createElement("div");
@@ -128,7 +212,7 @@ function generateGrid() {
         turnSpan.innerHTML = String(turn);
         // console.log('turn span found')
     }
-    // startGame();
+    startGame();
 }
 
 function loadBoard() {
