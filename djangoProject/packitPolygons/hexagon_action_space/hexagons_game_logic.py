@@ -180,15 +180,71 @@ def place_polygon(board, polygon):
     return board + polygon
 
 
+def print_board(board):
+    for row in board:
+        print(row)
+
+
+def numpy_board_to_list(board_np):
+    board = []
+    board_np = board_np.astype(int)
+    n = board_np.shape[0]
+    offset = int(
+        np.floor(n / 2)
+    )
+    for i in range(offset + 1):
+        board.append(board_np[i].tolist()[:n - offset + i])
+    for i in range(offset):
+        board.append(board_np[offset + 1 + i].tolist()[1 + i:])
+    return board
+
+
+def list_board_to_numpy(board, value=0):
+    n = len(board)
+    offset = int(
+        np.floor(n / 2)
+    )
+    for i in range(offset):
+        board[i].extend([value] * (offset - i))
+    for i in range(offset):
+        board[offset + 1 + i] = [value] * (i + 1) + board[offset + 1 + i]
+
+    return np.array(board)
+
+
+def play(board_size):
+    board = generate_board(board_size)
+    turn = 1
+    moves = get_possible_placements_for_turn(board, turn)
+    while moves:
+        moves_dict = {i: move for i, move in enumerate(moves)}
+        for i, move in moves_dict.items():
+            print(f'Move {i}:')
+            print_board(numpy_board_to_list(move))
+        print('Board: ')
+        print_board(numpy_board_to_list(board))
+        chosen_move = int(input('Choose move number: '))
+        board = place_polygon(board, moves_dict[chosen_move])
+        turn += 1
+        moves = get_possible_placements_for_turn(board, turn)
+        # print('Board: ')
+        # print(board)
+    print(f'Player {1 + turn % 2} wins after {turn - 1} turns')
+    print('Board: ')
+    print_board(numpy_board_to_list(board))
+    return
+
+
 if __name__ == '__main__':
-    print(
-        place_polygon(
-            generate_board(5),
-            get_possible_placements_for_k(
-                generate_board(5), 2
-            )[0]
-        )
-    )
-    print(
-        get_possible_placements_for_turn(generate_board(5), 1)
-    )
+    # print(
+    #     place_polygon(
+    #         generate_board(5),
+    #         get_possible_placements_for_k(
+    #             generate_board(5), 2
+    #         )[0]
+    #     )
+    # )
+    # print(
+    #     get_possible_placements_for_turn(generate_board(5), 1)
+    # )
+    play(5)

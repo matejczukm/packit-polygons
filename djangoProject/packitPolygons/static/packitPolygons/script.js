@@ -9,8 +9,14 @@ function onClickCell(row, col, cell) {
     if(!moveMatrix) {
         moveMatrix = getBoardMatrix();
     }
-    if(moveMatrix[row][col]) {
+    if(boardMatrix[row][col]) {
         alert('Cell already clicked');
+        return;
+    }
+    if(moveMatrix[row][col]) {
+        unclickCell(row, col);
+        moveMatrix[row][col] = 0;
+        cellsClicked--;
         return;
     }
     cellsClicked ++;
@@ -22,25 +28,29 @@ function onClickCell(row, col, cell) {
     // console.log(`Row: ${row}, col: ${col}`);
     moveMatrix[row][col] = turn;
     // console.log(moveMatrix);
-    console.log('Move matrix: ')
-    console.log(JSON.stringify(moveMatrix))
+    // console.log('Move matrix: ')
+    // console.log(JSON.stringify(moveMatrix))
     cell.style.backgroundColor = getColorForTurn(turn);
     cell.innerHTML = turn;
+}
+
+function unclickCell(i, j) {
+    let cellID = `${i};${j}`;
+    let cell = document.getElementById(cellID);
+    if (boardMatrix[i][j]) {
+        cell.innerHTML = boardMatrix[i][j];
+        cell.style.backgroundColor = getColorForTurn(boardMatrix[i][j]);
+    } else {
+        cell.innerHTML = '';
+        cell.style.backgroundColor = cellBaseColor;
+    }
 }
 
 function revertMove() {
     for(let i=0; i < moveMatrix.length; i++) {
         for(let j = 0; j<moveMatrix[i].length; j++) {
             if (moveMatrix[i][j] === turn) {
-                let cellID = `${i};${j}`;
-                let cell = document.getElementById(cellID);
-                if (boardMatrix[i][j]) {
-                    cell.innerHTML = boardMatrix[i][j];
-                    cell.style.backgroundColor = getColorForTurn(boardMatrix[i][j]);
-                } else {
-                    cell.innerHTML = '';
-                    cell.style.backgroundColor = cellBaseColor;
-                }
+                unclickCell(i, j);
             }
         }
     }

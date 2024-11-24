@@ -23,13 +23,13 @@ def index(request):
     return render(request, 'packitPolygons/index.html', context)
 
 
-def apply_move(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        board = data['board']
-        move = data['move']
-        turn = data['turn']
-        return JsonResponse(tri_fi.perform_move(board, move, turn))
+# def apply_move(request):
+#     if request.method == 'POST':
+#         data = json.loads(request.body)
+#         board = data['board']
+#         move = data['move']
+#         turn = data['turn']
+#         return JsonResponse(tri_fi.perform_move(board, move, turn))
 
 
 @csrf_exempt

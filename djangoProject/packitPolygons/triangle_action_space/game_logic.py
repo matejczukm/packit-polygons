@@ -20,7 +20,8 @@ def is_placement_valid(board, triangle):
         bool: True if triangle can be placed on board, False otherwise.
     """
     assert isinstance(board, np.ndarray) and isinstance(triangle,
-                                                        np.ndarray), f'Invalid data types. board: {type(board)}, triangle: {type(triangle)}'
+                                                        np.ndarray), (f'Invalid data types. board: {type(board)}, '
+                                                                      f'triangle: {type(triangle)}')
     assert board.shape == triangle.shape, f'Shapes do not match. board: {board.shape}, triangle: {triangle.shape}'
 
     return not np.logical_and(
@@ -38,8 +39,8 @@ def get_possible_placements(board, k, turn):
         turn (int): The current turn.
 
 
-    Returns:
-        list[numpy.ndarray]: A list of NumPy array representations for all possible placements of k-element polygons on the board.
+    Returns: list[numpy.ndarray]: A list of NumPy array representations for all possible placements of k-element
+    polygons on the board.
     """
     assert isinstance(board, np.ndarray), f'Invalid data types. board: {type(board)}'
 
@@ -87,7 +88,8 @@ def place_polygon(board, polygon):
         numpy.ndarray: The updated board after the polygon has been placed.
     """
     assert isinstance(board, np.ndarray) and isinstance(polygon,
-                                                        np.ndarray), f'Invalid data types. board: {type(board)}, triangle: {type(polygon)}'
+                                                        np.ndarray), (f'Invalid data types. board: {type(board)}, '
+                                                                      f'triangle: {type(polygon)}')
     assert board.shape == polygon.shape, f'Shapes do not match. board: {board.shape}, triangle: {polygon.shape}'
 
     return board + polygon
@@ -132,7 +134,7 @@ def play(board_size):
         moves = get_possible_moves(board, turn)
         print('Board: ')
         print_numpy_triangle(board)
-    print(f'Player {1 + (turn) % 2} wins after {turn - 1} turns')
+    print(f'Player {1 + turn % 2} wins after {turn - 1} turns')
     print('Board: ')
     print_numpy_triangle(board)
     return
