@@ -1,3 +1,3 @@
-# from djangoProject.packitPolygons.trianglesActionSpace import game_logic
+# from djangoProject.packitPolygons.triangle_action_space import game_logic
 # from game_logic import *
-from .trianglesActionSpace import frontend_interface
+from .triangle_action_space import frontend_interface

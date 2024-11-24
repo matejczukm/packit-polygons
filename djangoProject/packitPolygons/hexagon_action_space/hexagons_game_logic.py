@@ -1,4 +1,3 @@
-import copy
 import numpy as np
 
 
@@ -46,9 +45,9 @@ def cut_zeroes_from_polygon_vector(polygon_vector):
 
 def convert_polygon_vector_to_matrices(polygon_vector):
     # HAS TO BE REDONE - offset increases when last value bigger, for left it always increases
-    # returns list of arrays
+    # rretruns list of arrays
 
-    height = np.shape(polygon_vector)[0]
+    height = len(polygon_vector)
     width = np.max(polygon_vector)
 
     right_leaning_matrix = np.zeros([height, width])
@@ -114,7 +113,7 @@ def check_if_vector_fits_on_board(vector, board_size):
 def expand_to_hex_board(polygon, board_size, left, top):
     # takes np.array matrix repr of polygon, np.array matrix repr of board, and 2 ints
     polygon_height = len(polygon)
-    polygon_width = len(polygon[1])
+    polygon_width = len(polygon[0])
 
     assert polygon_height + top <= board_size, 'Invalid vertical offset'
     assert polygon_width + left <= board_size, 'Invalid horizontal offset'
@@ -148,10 +147,9 @@ def get_possible_placements(polygon_matrix, board):
     vertical_offset = board_size - len(polygon_matrix)
     possible_placements = [None] * (max(horizontal_offset * vertical_offset, vertical_offset, horizontal_offset, 1))
     count = 0
-    for top in range(max(horizontal_offset, 1)):
-        for left in range(max(vertical_offset, 1)):
+    for top in range(max(vertical_offset, 1)):
+        for left in range(max(horizontal_offset, 1)):
             expanded_polygon = expand_to_hex_board(polygon_matrix, board_size, left, top)
-
             if not np.any(board + expanded_polygon == 2):
                 possible_placements[count] = expanded_polygon
                 count += 1
@@ -160,7 +158,6 @@ def get_possible_placements(polygon_matrix, board):
 
 def get_possible_placements_for_k(board, k):
     board_size = len(board)
-    print(board_size)
     valid_vectors = get_polygon_vectors(k, board_size)
     polygon_matrices = []
     for vector in valid_vectors:
@@ -171,11 +168,27 @@ def get_possible_placements_for_k(board, k):
     return possible_placements
 
 
+def get_possible_placements_for_turn(board, turn):
+    res = get_possible_placements_for_k(board, turn)
+    res.extend(
+        get_possible_placements_for_k(board, turn + 1)
+    )
+    return res
+
+
+def place_polygon(board, polygon):
+    return board + polygon
+
+
 if __name__ == '__main__':
-    pass
-    # x = np.arange(12).reshape(3,4)
-    # print(len(x))
-    # board = generate_board(9)
-    # print(board)
-    # # print(board.shape)
-    # print(get_possible_placements_for_k(board,1))
+    print(
+        place_polygon(
+            generate_board(5),
+            get_possible_placements_for_k(
+                generate_board(5), 2
+            )[0]
+        )
+    )
+    print(
+        get_possible_placements_for_turn(generate_board(5), 1)
+    )

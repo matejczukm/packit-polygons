@@ -49,6 +49,7 @@ function revertMove() {
 }
 
 function confirmMove() {
+    console.log('Board matrix:', boardMatrix)
     // console.log('Possible moves')
     // console.log(possibleMoves);
     // console.log('Current move')
@@ -70,7 +71,8 @@ function confirmMove() {
         body : JSON.stringify({
             board : boardMatrix,
             move : moveMatrix,
-            turn : turn
+            turn : turn,
+            game_mode : (getGameMode())
         })
         }
     )
@@ -110,7 +112,10 @@ function startGame() {
         headers: {
         'Content-Type': 'application/json'
         },
-        body : JSON.stringify({board_size : getBoardDimension()})
+        body : JSON.stringify({
+            board_size : getBoardDimension(),
+            game_mode : getGameMode()
+        }),
         }
     )
     .then(response => {
@@ -210,7 +215,6 @@ function generateGrid() {
     let turnSpan =  document.getElementById('turn-span');
     if (turnSpan){
         turnSpan.innerHTML = String(turn);
-        // console.log('turn span found')
     }
     startGame();
 }
