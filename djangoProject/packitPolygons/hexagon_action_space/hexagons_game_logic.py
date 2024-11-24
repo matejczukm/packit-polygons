@@ -143,16 +143,18 @@ def generate_board(board_side):
 
 def get_possible_placements(polygon_matrix, board):
     board_size = len(board)
-    horizontal_offset = board_size - len(polygon_matrix[0])
-    vertical_offset = board_size - len(polygon_matrix)
-    possible_placements = [None] * (max(horizontal_offset * vertical_offset, vertical_offset, horizontal_offset, 1))
-    count = 0
-    for top in range(max(vertical_offset, 1)):
-        for left in range(max(horizontal_offset, 1)):
+    horizontal_offset = board_size -len(polygon_matrix[0])+1
+    vertical_offset = board_size - len(polygon_matrix)+1
+    possible_placements = [None]*(horizontal_offset*vertical_offset)
+    count=0
+    for top in range(vertical_offset):
+        for left in range(horizontal_offset):
+
+            
             expanded_polygon = expand_to_hex_board(polygon_matrix, board_size, left, top)
-            if not np.any(board + expanded_polygon == 2):
+            if not np.any(board + expanded_polygon==2):
                 possible_placements[count] = expanded_polygon
-                count += 1
+                count+=1
     return possible_placements[:count]
 
 
