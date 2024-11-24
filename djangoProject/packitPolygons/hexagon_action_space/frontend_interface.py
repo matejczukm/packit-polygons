@@ -46,14 +46,16 @@ def start_game(board_side):
 
 
 def perform_move(board, move, turn):
-    print(board)
+    # print(board)
     board_np = list_board_to_numpy(board, 1)
+    # Convert the board from turn numbers to binary (0s and 1s) for backend processing
     board_np = board_np.astype(bool).astype(int)
-    print(board_np)
+    # print(board_np)
     move_np = list_board_to_numpy(move)
 
     board_np = place_polygon(board_np, move_np)
     possible_moves = get_possible_placements_for_turn(board_np, turn)
+    # print(possible_moves)
 
     return {
         'board': numpy_board_to_list(board_np),

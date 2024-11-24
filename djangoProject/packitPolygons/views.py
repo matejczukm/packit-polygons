@@ -49,7 +49,7 @@ def confirm_move(request):
         data = json.loads(request.body)
         # print(data)
         board = data['board']
-        print(board)
+        # print(board)
         move = data['move']
         turn = data['turn']
         mode = data['game_mode']
