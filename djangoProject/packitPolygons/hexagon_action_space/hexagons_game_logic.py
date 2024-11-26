@@ -143,18 +143,17 @@ def generate_board(board_side):
 
 def get_possible_placements(polygon_matrix, board):
     board_size = len(board)
-    horizontal_offset = board_size -len(polygon_matrix[0])+1
-    vertical_offset = board_size - len(polygon_matrix)+1
-    possible_placements = [None]*(horizontal_offset*vertical_offset)
-    count=0
+    horizontal_offset = board_size - len(polygon_matrix[0]) + 1
+    vertical_offset = board_size - len(polygon_matrix) + 1
+    possible_placements = [None] * (horizontal_offset * vertical_offset)
+    count = 0
     for top in range(vertical_offset):
         for left in range(horizontal_offset):
 
-            
             expanded_polygon = expand_to_hex_board(polygon_matrix, board_size, left, top)
-            if not np.any(board + expanded_polygon==2):
+            if not np.any(board + expanded_polygon == 2):
                 possible_placements[count] = expanded_polygon
-                count+=1
+                count += 1
     return possible_placements[:count]
 
 
@@ -249,4 +248,22 @@ if __name__ == '__main__':
     # print(
     #     get_possible_placements_for_turn(generate_board(5), 1)
     # )
-    play(5)
+    # play(5)
+    board = [
+        [1, 1, 1, 1],
+        [1, 1, 0, 1, 1],
+        [1, 1, 1, 1, 1, 1],
+        [0, 0, 1, 1, 1, 1, 0],
+        [0, 0, 1, 1, 0, 0],
+        [0, 0, 1, 0, 0],
+        [0, 0, 0, 0]
+    ]
+
+    board_np = list_board_to_numpy(board, 1)
+    # board_np = generate_board(4)
+    x = get_possible_placements_for_turn(board_np, 7)
+    for i in x:
+        print_board(numpy_board_to_list(i))
+
+    # print(numpy_board_to_list(generate_board(4)))
+    # print(generate_board(5))
