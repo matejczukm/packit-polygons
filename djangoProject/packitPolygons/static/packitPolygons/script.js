@@ -6,6 +6,7 @@ let possibleMoves = null;
 let cellBaseColor = '#bab1b5';
 
 function onClickCell(row, col, cell) {
+    if(cell._disabled) return;
     if(!moveMatrix) {
         moveMatrix = getBoardMatrix();
     }
@@ -46,6 +47,17 @@ function unclickCell(i, j) {
         cell.innerHTML = '';
         cell.style.backgroundColor = cellBaseColor;
     }
+}
+
+function disableClicks() {
+    let cellClass = getGameMode() + '-cell';
+    console.log(cellClass);
+    let cells = document.getElementsByClassName(cellClass);
+    // console.log(cells[0]);
+    Array.from(cells).forEach(cell => {
+        // cell.removeEventListener('click', onClickCell);
+        cell._disabled = true;
+    })
 }
 
 function revertMove() {
@@ -110,7 +122,8 @@ function confirmMove() {
         } else {
             // alert('Game finished');
             let winnerHeader = document.getElementById('winner-header');
-            winnerHeader.innerHTML = `Player ${turn % 2 + 1} wins!`
+            winnerHeader.innerHTML = `Player ${turn % 2 + 1} wins!`;
+            disableClicks();
         }
     })
     .catch(error => {
@@ -152,6 +165,7 @@ function createCell(className, row, col) {
     cell.addEventListener('click', () => {
         onClickCell(row, col, cell);
     });
+    cell._disabled = false;
     return cell;
 }
 
