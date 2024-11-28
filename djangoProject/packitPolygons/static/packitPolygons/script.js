@@ -23,8 +23,10 @@ function onClickCell(row, col, cell) {
 
     if (cellsClicked > turn + 1) {
         alert(`You can click at most ${turn+1} cells`);
+        cellsClicked--;
         return;
     }
+
     // console.log(`Row: ${row}, col: ${col}`);
     moveMatrix[row][col] = turn;
     // console.log(moveMatrix);
