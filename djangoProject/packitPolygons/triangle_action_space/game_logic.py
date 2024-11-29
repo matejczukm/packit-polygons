@@ -29,13 +29,14 @@ def is_placement_valid(board, triangle):
     ).sum()  # True only if the sum is equal to 0.
 
 
-def get_possible_placements(board, k):
+def get_possible_placements(board, k, as_list=False):
     """
     Returns all possible placements of k-element polygons on the given board.
 
     Args:
         board (numpy.ndarray): A NumPy array representation of a triangular board.
         k (int): The number of elements in the polygon to be placed.
+        as_list (bool): If true result is list of lists.
 
     Returns: list[numpy.ndarray]: A list of NumPy array representations for all possible placements of k-element
     polygons on the board.
@@ -52,7 +53,10 @@ def get_possible_placements(board, k):
         for expanded_polygon in sm.expand_polygon(*polygon, n):
             expanded_polygon = dc.convert_triangle_to_numpy_array(expanded_polygon)
             if is_placement_valid(board, expanded_polygon):
-                result.append(expanded_polygon)
+                if as_list:
+                    result.append(expanded_polygon.tolist())
+                else:
+                    result.append(expanded_polygon)
 
     return result
 
