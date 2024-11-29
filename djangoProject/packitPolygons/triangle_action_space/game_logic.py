@@ -29,15 +29,13 @@ def is_placement_valid(board, triangle):
     ).sum()  # True only if the sum is equal to 0.
 
 
-def get_possible_placements(board, k, turn):
+def get_possible_placements(board, k):
     """
     Returns all possible placements of k-element polygons on the given board.
 
     Args:
         board (numpy.ndarray): A NumPy array representation of a triangular board.
         k (int): The number of elements in the polygon to be placed.
-        turn (int): The current turn.
-
 
     Returns: list[numpy.ndarray]: A list of NumPy array representations for all possible placements of k-element
     polygons on the board.
@@ -46,8 +44,7 @@ def get_possible_placements(board, k, turn):
 
     # board_matrix = convert_triangle_to_numpy_array(board)
     n = board.shape[0]
-    empty_cells_num = n ** 2 - board.astype(
-        bool).sum()  # TODO: decide whether we want to store only ones in board or turn numbers
+    empty_cells_num = n ** 2 - board.sum()  # TODO: decide whether we want to store only ones in board or turn numbers
     result = []
     if k > empty_cells_num:
         return result
@@ -55,7 +52,7 @@ def get_possible_placements(board, k, turn):
         for expanded_polygon in sm.expand_polygon(*polygon, n):
             expanded_polygon = dc.convert_triangle_to_numpy_array(expanded_polygon)
             if is_placement_valid(board, expanded_polygon):
-                result.append(expanded_polygon * turn)
+                result.append(expanded_polygon)
 
     return result
 
@@ -73,7 +70,7 @@ def get_possible_moves(board, turn):
     """
     assert isinstance(board, np.ndarray), f'Invalid data types. board: {type(board)}'
 
-    return get_possible_placements(board, turn, turn) + get_possible_placements(board, turn + 1, turn)
+    return get_possible_placements(board, turn) + get_possible_placements(board, turn + 1)
 
 
 def place_polygon(board, polygon):
