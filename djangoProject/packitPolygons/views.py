@@ -1,7 +1,6 @@
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
-
 from .triangle_action_space import frontend_interface as tri_fi
 from .hexagon_action_space import frontend_interface as hex_fi
 import json

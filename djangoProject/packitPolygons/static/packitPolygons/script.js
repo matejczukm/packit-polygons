@@ -243,6 +243,8 @@ function generateGrid() {
         turnSpan.innerHTML = String(turn);
     }
     startGame();
+    let winnerHeader = document.getElementById('winner-header');
+    winnerHeader.innerHTML = '';
 }
 
 function loadBoard() {
