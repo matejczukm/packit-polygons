@@ -44,7 +44,7 @@ def get_possible_placements(board, k):
 
     # board_matrix = convert_triangle_to_numpy_array(board)
     n = board.shape[0]
-    empty_cells_num = n ** 2 - board.sum()  # TODO: decide whether we want to store only ones in board or turn numbers
+    empty_cells_num = n ** 2 - board.sum()
     result = []
     if k > empty_cells_num:
         return result
