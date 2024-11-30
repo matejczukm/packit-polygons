@@ -251,7 +251,18 @@ function loadBoard() {
     // on load function
     generateGrid();
     boardMatrix = getBoardMatrix();
-    // console.log(boardMatrix);
+
+    // const openBtn = document.getElementById("openModal");
+    // const closeBtn = document.getElementById("closeModal");
+    // const modal = document.getElementById("modal");
+    //
+    // openBtn.addEventListener("click", () => {
+    //     modal.classList.add("open");
+    // });
+    //
+    // closeBtn.addEventListener("click", () => {
+    //     modal.classList.remove("open");
+    // });
 }
 function updateSizes() {
     // Updates the sizes of cells to maintain a consistent board size,
