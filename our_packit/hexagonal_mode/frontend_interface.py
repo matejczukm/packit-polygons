@@ -1,6 +1,6 @@
 import json
 
-from .hexagons_game_logic import *
+from .game_logic import *
 import numpy as np
 
 
