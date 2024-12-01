@@ -4,6 +4,24 @@ let cellsClicked = 0;
 let turn = 1;
 let possibleMoves = null;
 let cellBaseColor = '#bab1b5';
+let aiStarts = null;
+
+function startAiMode(doesAIStart) {
+    console.log(doesAIStart);
+    let popUp = document.getElementById("ai-popup");
+    popUp.classList.remove("open");
+    aiStarts = doesAIStart;
+}
+
+function changeToNormalMode() {
+    aiStarts = null;
+    startGame();
+}
+
+function openAiPopUp() {
+    let popUp = document.getElementById("ai-popup");
+    popUp.classList.add("open");
+}
 
 function onClickCell(row, col, cell) {
     if(cell._disabled) return;
@@ -96,7 +114,8 @@ function confirmMove() {
             board : boardMatrix,
             move : moveMatrix,
             turn : turn,
-            game_mode : (getGameMode())
+            game_mode : getGameMode(),
+            ai_mode : aiStarts
         })
         }
     )
@@ -139,7 +158,8 @@ function startGame() {
         },
         body : JSON.stringify({
             board_size : getBoardDimension(),
-            game_mode : getGameMode()
+            game_mode : getGameMode(),
+            ai_mode : aiStarts
         }),
         }
     )
