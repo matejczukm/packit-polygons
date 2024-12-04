@@ -6,41 +6,65 @@ let possibleMoves = null;
 let cellBaseColor = '#bab1b5';
 
 function onClickCell(row, col, cell) {
+    if(cell._disabled) return;
     if(!moveMatrix) {
         moveMatrix = getBoardMatrix();
     }
-    if(moveMatrix[row][col]) {
+    if(boardMatrix[row][col]) {
         alert('Cell already clicked');
+        return;
+    }
+    if(moveMatrix[row][col]) {
+        unclickCell(row, col);
+        moveMatrix[row][col] = 0;
+        cellsClicked--;
         return;
     }
     cellsClicked ++;
 
     if (cellsClicked > turn + 1) {
         alert(`You can click at most ${turn+1} cells`);
+        cellsClicked--;
         return;
     }
+
     // console.log(`Row: ${row}, col: ${col}`);
     moveMatrix[row][col] = turn;
     // console.log(moveMatrix);
-    console.log('Move matrix: ')
-    console.log(JSON.stringify(moveMatrix))
+    // console.log('Move matrix: ')
+    // console.log(JSON.stringify(moveMatrix))
     cell.style.backgroundColor = getColorForTurn(turn);
     cell.innerHTML = turn;
+}
+
+function unclickCell(i, j) {
+    let cellID = `${i};${j}`;
+    let cell = document.getElementById(cellID);
+    if (boardMatrix[i][j]) {
+        cell.innerHTML = boardMatrix[i][j];
+        cell.style.backgroundColor = getColorForTurn(boardMatrix[i][j]);
+    } else {
+        cell.innerHTML = '';
+        cell.style.backgroundColor = cellBaseColor;
+    }
+}
+
+function disableClicks() {
+    let cellClass = getGameMode() + '-cell';
+    console.log(cellClass);
+    let cells = document.getElementsByClassName(cellClass);
+    // console.log(cells[0]);
+    Array.from(cells).forEach(cell => {
+        // cell.removeEventListener('click', onClickCell);
+        cell._disabled = true;
+    })
 }
 
 function revertMove() {
     for(let i=0; i < moveMatrix.length; i++) {
         for(let j = 0; j<moveMatrix[i].length; j++) {
             if (moveMatrix[i][j] === turn) {
-                let cellID = `${i};${j}`;
-                let cell = document.getElementById(cellID);
-                if (boardMatrix[i][j]) {
-                    cell.innerHTML = boardMatrix[i][j];
-                    cell.style.backgroundColor = getColorForTurn(boardMatrix[i][j]);
-                } else {
-                    cell.innerHTML = '';
-                    cell.style.backgroundColor = cellBaseColor;
-                }
+                unclickCell(i, j);
             }
         }
     }
@@ -49,6 +73,7 @@ function revertMove() {
 }
 
 function confirmMove() {
+    console.log('Board matrix:', boardMatrix)
     // console.log('Possible moves')
     // console.log(possibleMoves);
     // console.log('Current move')
@@ -70,7 +95,8 @@ function confirmMove() {
         body : JSON.stringify({
             board : boardMatrix,
             move : moveMatrix,
-            turn : turn
+            turn : turn,
+            game_mode : (getGameMode())
         })
         }
     )
@@ -96,7 +122,8 @@ function confirmMove() {
         } else {
             // alert('Game finished');
             let winnerHeader = document.getElementById('winner-header');
-            winnerHeader.innerHTML = `Player ${turn % 2 + 1} wins!`
+            winnerHeader.innerHTML = `Player ${turn % 2 + 1} wins!`;
+            disableClicks();
         }
     })
     .catch(error => {
@@ -110,7 +137,10 @@ function startGame() {
         headers: {
         'Content-Type': 'application/json'
         },
-        body : JSON.stringify({board_size : getBoardDimension()})
+        body : JSON.stringify({
+            board_size : getBoardDimension(),
+            game_mode : getGameMode()
+        }),
         }
     )
     .then(response => {
@@ -135,6 +165,7 @@ function createCell(className, row, col) {
     cell.addEventListener('click', () => {
         onClickCell(row, col, cell);
     });
+    cell._disabled = false;
     return cell;
 }
 
@@ -210,9 +241,10 @@ function generateGrid() {
     let turnSpan =  document.getElementById('turn-span');
     if (turnSpan){
         turnSpan.innerHTML = String(turn);
-        // console.log('turn span found')
     }
     startGame();
+    let winnerHeader = document.getElementById('winner-header');
+    winnerHeader.innerHTML = '';
 }
 
 function loadBoard() {

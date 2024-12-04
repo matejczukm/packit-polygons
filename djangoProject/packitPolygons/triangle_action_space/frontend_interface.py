@@ -32,8 +32,12 @@ def perform_move(board, move, turn):
         dict:
 
     """
+
     board_np = dc.convert_triangle_to_numpy_array(board)
     move_np = dc.convert_triangle_to_numpy_array(move)
+
+    board_np = board_np.astype(bool).astype(int)
+    move_np = move_np.astype(bool).astype(int)
 
     board_np = place_polygon(board_np, move_np)
     possible_moves = get_possible_moves(board_np, turn)
@@ -41,7 +45,7 @@ def perform_move(board, move, turn):
     return {
         'board': dc.convert_numpy_array_to_triangle(board_np),
         'moves': [
-            json.dumps(dc.convert_numpy_array_to_triangle(move), separators=(',', ': ')) for move in
+            json.dumps(dc.convert_numpy_array_to_triangle(move * turn), separators=(',', ': ')) for move in
             possible_moves
         ]
     }
