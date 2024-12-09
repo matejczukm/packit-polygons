@@ -4,6 +4,25 @@ let cellsClicked = 0;
 let turn = 1;
 let possibleMoves = null;
 let cellBaseColor = '#bab1b5';
+let aiStarts = null;
+
+function startAiMode(doesAIStart) {
+    console.log(doesAIStart);
+    let popUp = document.getElementById("ai-popup");
+    popUp.classList.remove("open");
+    aiStarts = doesAIStart;
+    generateGrid();
+}
+
+function changeToNormalMode() {
+    aiStarts = null;
+    generateGrid();
+}
+
+function openAiPopUp() {
+    let popUp = document.getElementById("ai-popup");
+    popUp.classList.add("open");
+}
 
 function onClickCell(row, col, cell) {
     if(cell._disabled) return;
@@ -96,7 +115,8 @@ function confirmMove() {
             board : boardMatrix,
             move : moveMatrix,
             turn : turn,
-            game_mode : (getGameMode())
+            game_mode : getGameMode(),
+            ai_mode : aiStarts
         })
         }
     )
@@ -139,7 +159,8 @@ function startGame() {
         },
         body : JSON.stringify({
             board_size : getBoardDimension(),
-            game_mode : getGameMode()
+            game_mode : getGameMode(),
+            ai_mode : aiStarts
         }),
         }
     )
@@ -251,7 +272,18 @@ function loadBoard() {
     // on load function
     generateGrid();
     boardMatrix = getBoardMatrix();
-    // console.log(boardMatrix);
+
+    // const openBtn = document.getElementById("openModal");
+    // const closeBtn = document.getElementById("closeModal");
+    // const modal = document.getElementById("modal");
+    //
+    // openBtn.addEventListener("click", () => {
+    //     modal.classList.add("open");
+    // });
+    //
+    // closeBtn.addEventListener("click", () => {
+    //     modal.classList.remove("open");
+    // });
 }
 function updateSizes() {
     // Updates the sizes of cells to maintain a consistent board size,

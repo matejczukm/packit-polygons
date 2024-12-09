@@ -15,11 +15,15 @@
     <table class="header-table">
         <tr>
             <td>
+                <button id="openModal">How to Play</button>
+            </td>
+            <td>
                 <button onclick="window.location.href='{% url 'index' %}'">Triangular Mode</button>
             </td>
             <td>
                 <button onclick="window.location.href='{% url 'hexagon' %}'">Hexagonal Mode</button>
             </td>
+
         </tr>
     </table>
 </header>
@@ -28,6 +32,21 @@
     {%  block content %}
 
     {%  endblock %}
+    <div id="ai-popup" class="popup">
+        <div class="popup-content">
+            <h2>Who starts the game?</h2>
+            <table>
+                <tr>
+                    <td>
+                        <button id="ai-button" class="popup-button" onclick="startAiMode(true)">AI</button>
+                    </td>
+                    <td>
+                        <button id="player-button" class="popup-button" onclick="startAiMode(false)">Player</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
 <div class="app-footer">
     <table>
         <tr>
@@ -42,6 +61,8 @@
                 <input id="dim-input" type="number" min="1" max="10" value="4">
             </label></td>
             <td><button class="reset-button" onclick="generateGrid()">Reset</button></td>
+            <td><button class="ai-mode" onclick="openAiPopUp()">AI mode</button></td>
+            <td><button class="1v1-mode" onclick="changeToNormalMode()">1 vs 1 mode</button></td>
         </tr>
     </table>
 </div>
