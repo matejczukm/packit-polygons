@@ -7,7 +7,7 @@ import json
 
 
 def hexagon(request):
-    current_turn = 1
+    # current_turn = 1
     # context = {
     #     'current_turn': current_turn,
     # }
@@ -15,11 +15,11 @@ def hexagon(request):
 
 
 def index(request):
-    current_turn = 1
-    context = {
-        'current_turn': current_turn,
-    }
-    return render(request, 'packitPolygons/index.html', context)
+    # current_turn = 1
+    # context = {
+    #     'current_turn': current_turn,
+    # }
+    return render(request, 'packitPolygons/index.html')
 
 
 # def apply_move(request):
