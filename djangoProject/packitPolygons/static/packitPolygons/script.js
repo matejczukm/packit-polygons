@@ -11,11 +11,12 @@ function startAiMode(doesAIStart) {
     let popUp = document.getElementById("ai-popup");
     popUp.classList.remove("open");
     aiStarts = doesAIStart;
+    generateGrid();
 }
 
 function changeToNormalMode() {
     aiStarts = null;
-    startGame();
+    generateGrid();
 }
 
 function openAiPopUp() {
