@@ -17,8 +17,8 @@ if PARENT_DIR not in sys.path:
 from our_packit.triangular_mode import frontend_interface as tri_fi
 from our_packit.hexagonal_mode import frontend_interface as hex_fi
 from our_packit.triangular_mode import data_convertions as tri_dc
-
-from our_packit.mcts_games import TriangularPackit
+sys.path.insert(0, './alpha-zero-general')
+from HexGame import HexGame
 
 
 def model_move(board, turn, game_mode):
