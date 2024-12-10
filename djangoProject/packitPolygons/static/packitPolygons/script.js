@@ -4,18 +4,21 @@ let cellsClicked = 0;
 let turn = 1;
 let possibleMoves = null;
 let cellBaseColor = '#bab1b5';
-let aiStarts = null;
+let aiStarts = false;
+let aiMode = false;
 
 function startAiMode(doesAIStart) {
-    console.log(doesAIStart);
+    // console.log(doesAIStart);
     let popUp = document.getElementById("ai-popup");
     popUp.classList.remove("open");
     aiStarts = doesAIStart;
+    aiMode = true;
     generateGrid();
 }
 
 function changeToNormalMode() {
-    aiStarts = null;
+    // aiStarts = null;
+    aiMode = false;
     generateGrid();
 }
 
@@ -56,6 +59,24 @@ function onClickCell(row, col, cell) {
     cell.innerHTML = turn;
 }
 
+function updateCellsAfterMove(board) {
+    let updated = false;
+    for (let i=0; i < boardMatrix.length; i++) {
+        for (let j = 0; j<boardMatrix[i].length; j++) {
+            if (boardMatrix[i][j]) {
+                let cellID = `${i};${j}`;
+                let cell = document.getElementById(cellID);
+                if (cell.innerHTML === '') {
+                    cell.innerHTML = turn;
+                    cell.style.backgroundColor = getColorForTurn(turn);
+                    updated = true;
+                }
+            }
+        }
+    }
+    return updated;
+}
+
 function unclickCell(i, j) {
     let cellID = `${i};${j}`;
     let cell = document.getElementById(cellID);
@@ -70,7 +91,7 @@ function unclickCell(i, j) {
 
 function disableClicks() {
     let cellClass = getGameMode() + '-cell';
-    console.log(cellClass);
+    // console.log(cellClass);
     let cells = document.getElementsByClassName(cellClass);
     // console.log(cells[0]);
     Array.from(cells).forEach(cell => {
@@ -116,7 +137,8 @@ function confirmMove() {
             move : moveMatrix,
             turn : turn,
             game_mode : getGameMode(),
-            ai_mode : aiStarts
+            ai_starts : aiStarts,
+            ai_mode : aiMode
         })
         }
     )
@@ -132,9 +154,17 @@ function confirmMove() {
         boardMatrix = data.board;
         // console.log(data.board)
         // console.log('Current board', boardMatrix);
+        if(updateCellsAfterMove()) {
+            turn++;
+
+        }
         if(possibleMoves.length > 0) {
             moveMatrix = getBoardMatrix();
             cellsClicked = 0;
+            if (!aiMode) {
+                let winnerHeader = document.getElementById('winner-header');
+                winnerHeader.innerHTML = `Players ${(turn + 1) % 2 + 1} turn`;
+            }
             let turnSpan = document.getElementById('turn-span');
             if (turnSpan) {
                 turnSpan.innerHTML = String(turn);
@@ -143,6 +173,14 @@ function confirmMove() {
             // alert('Game finished');
             let winnerHeader = document.getElementById('winner-header');
             winnerHeader.innerHTML = `Player ${turn % 2 + 1} wins!`;
+            if (aiMode) {
+                if ((aiStarts && ((turn+1) % 2 === 1)) || (!aiStarts && ((turn+1) % 2 === 0)))  {
+                    winnerHeader.innerHTML = `AI wins!`;
+                } else {
+                    winnerHeader.innerHTML = `Player wins!`;
+                }
+            }
+
             disableClicks();
         }
     })
@@ -160,7 +198,8 @@ function startGame() {
         body : JSON.stringify({
             board_size : getBoardDimension(),
             game_mode : getGameMode(),
-            ai_mode : aiStarts
+            ai_starts : aiStarts,
+            ai_mode : aiMode
         }),
         }
     )
@@ -173,6 +212,19 @@ function startGame() {
     .then(data => {
         console.log("Game started:", data);
         possibleMoves = data.moves;
+        boardMatrix = data.board;
+        if(updateCellsAfterMove()) {
+            turn++;
+            let turnSpan = document.getElementById('turn-span');
+            if (turnSpan) {
+                turnSpan.innerHTML = String(turn);
+            }
+        }
+        if (!aiMode) {
+                let winnerHeader = document.getElementById('winner-header');
+                winnerHeader.innerHTML = `Players ${(turn + 1) % 2 + 1} turn`;
+            }
+
     })
     .catch(error => {
         console.error("There was an error:", error);
@@ -183,6 +235,7 @@ function createCell(className, row, col) {
     let cell = document.createElement("div");
     cell.className = className;
     cell.id = `${row};${col}`;
+    cell.innerHTML = '';
     cell.addEventListener('click', () => {
         onClickCell(row, col, cell);
     });
