@@ -76,7 +76,7 @@ def start_new_game(request):
             return JsonResponse(hex_fi.start_game(int(board_size)))
 
         # TODO: choose model and game based on the mode and board size
-        if board_size >= 3:
+        if board_size >= 0:
             model_name = mode + str(board_size)
             if model_name not in ai_players.keys():
                 ai_players['model_name'] = AIPlayer(board_size, mode)
@@ -144,7 +144,7 @@ def confirm_move(request):
                 turn=turn
             ))
         board_size = len(board[-1]) if mode == 'hexagonal' else len(board)
-        if board_size >= 3:
+        if board_size >= 0:
             model_name = mode + str(board_size)
             if model_name not in ai_players.keys():
                 ai_players['model_name'] = AIPlayer(board_size, mode)
