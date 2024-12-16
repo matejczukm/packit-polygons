@@ -66,8 +66,6 @@ def index(request):
 def start_new_game(request):
     if request.method == 'POST':
         data = json.loads(request.body)
-        print(data['ai_mode'])
-        print(data['ai_starts'])
         board_size = data['board_size']
         mode = data['game_mode']
         if not data['ai_mode'] or not data['ai_starts']:
@@ -75,12 +73,11 @@ def start_new_game(request):
                 return JsonResponse(tri_fi.start_game(int(board_size)))
             return JsonResponse(hex_fi.start_game(int(board_size)))
 
-        # TODO: choose model and game based on the mode and board size
         if board_size >= 0:
             model_name = mode + str(board_size)
-            if model_name not in ai_players.keys():
-                ai_players['model_name'] = AIPlayer(board_size, mode)
-            ai_player = ai_players['model_name']
+            if model_name not in ai_players:
+                ai_players[model_name] = AIPlayer(board_size, mode)
+            ai_player = ai_players[model_name]
             if mode == 'triangular':
                 board = tri_fi.get_board(board_size)
                 move = ai_player.mcts_get_action(board, 1)
@@ -146,9 +143,9 @@ def confirm_move(request):
         board_size = len(board[-1]) if mode == 'hexagonal' else len(board)
         if board_size >= 0:
             model_name = mode + str(board_size)
-            if model_name not in ai_players.keys():
-                ai_players['model_name'] = AIPlayer(board_size, mode)
-            ai_player = ai_players['model_name']
+            if model_name not in ai_players:
+                ai_players[model_name] = AIPlayer(board_size, mode)
+            ai_player = ai_players[model_name]
             if mode == 'triangular':
                 board_np = tri_dc.convert_triangle_to_numpy_array(board).astype(bool).astype(int)
                 move_np = tri_dc.convert_triangle_to_numpy_array(move).astype(bool).astype(int)
