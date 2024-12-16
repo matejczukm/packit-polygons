@@ -130,7 +130,7 @@ def confirm_move(request):
         move = data['move']
         turn = int(data['turn'])
         mode = data['game_mode']
-        print(data)
+        # print(data)
         if not data['ai_mode']:
             if mode == 'triangular':
                 return JsonResponse(tri_fi.perform_move(
@@ -153,7 +153,7 @@ def confirm_move(request):
                 board_np = tri_dc.convert_triangle_to_numpy_array(board).astype(bool).astype(int)
                 move_np = tri_dc.convert_triangle_to_numpy_array(move).astype(bool).astype(int)
                 board_np = board_np + move_np
-                print(board_np)
+                # print(board_np)
                 next_move = ai_player.mcts_get_action(board_np, turn)
                 board = tri_dc.convert_numpy_array_to_triangle(board_np)
                 next_move = tri_dc.convert_numpy_array_to_triangle(next_move)
