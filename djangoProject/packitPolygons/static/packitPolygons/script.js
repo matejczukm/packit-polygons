@@ -6,6 +6,7 @@ let possibleMoves = null;
 let cellBaseColor = '#bab1b5';
 let aiStarts = false;
 let aiMode = false;
+let confirmMoveButton = null;
 
 function startAiMode(doesAIStart) {
     // console.log(doesAIStart);
@@ -14,12 +15,17 @@ function startAiMode(doesAIStart) {
     aiStarts = doesAIStart;
     aiMode = true;
     generateGrid();
+    // if (aiStarts) {
+    //     confirmMoveButton._disabled = true;
+    // }
 }
 
 function changeToNormalMode() {
     // aiStarts = null;
     aiMode = false;
     generateGrid();
+    // confirmMoveButton._disabled = true;
+
 }
 
 function openAiPopUp() {
@@ -113,6 +119,9 @@ function revertMove() {
 }
 
 function confirmMove() {
+    if (confirmMoveButton._disabled) return;
+    confirmMoveButton._disabled = true;
+
     console.log('Board matrix:', boardMatrix)
     // console.log('Possible moves')
     // console.log(possibleMoves);
@@ -183,6 +192,8 @@ function confirmMove() {
 
             disableClicks();
         }
+        confirmMoveButton._disabled = false;
+
     })
     .catch(error => {
         console.error("There was an error:", error);
@@ -224,6 +235,8 @@ function startGame() {
                 let winnerHeader = document.getElementById('winner-header');
                 winnerHeader.innerHTML = `Players ${(turn + 1) % 2 + 1} turn`;
             }
+        confirmMoveButton._disabled = false;
+
 
     })
     .catch(error => {
@@ -319,6 +332,8 @@ function generateGrid() {
     startGame();
     let winnerHeader = document.getElementById('winner-header');
     winnerHeader.innerHTML = '';
+    confirmMoveButton = document.getElementsByClassName('move-button')[0];
+    confirmMoveButton._disabled = true;
 }
 
 function loadBoard() {

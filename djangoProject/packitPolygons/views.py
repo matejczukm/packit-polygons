@@ -66,8 +66,6 @@ def index(request):
 def start_new_game(request):
     if request.method == 'POST':
         data = json.loads(request.body)
-        print(data['ai_mode'])
-        print(data['ai_starts'])
         board_size = data['board_size']
         mode = data['game_mode']
         if not data['ai_mode'] or not data['ai_starts']:
@@ -75,12 +73,11 @@ def start_new_game(request):
                 return JsonResponse(tri_fi.start_game(int(board_size)))
             return JsonResponse(hex_fi.start_game(int(board_size)))
 
-        # TODO: choose model and game based on the mode and board size
         if board_size >= 0:
             model_name = mode + str(board_size)
-            if model_name not in ai_players.keys():
-                ai_players['model_name'] = AIPlayer(board_size, mode)
-            ai_player = ai_players['model_name']
+            if model_name not in ai_players:
+                ai_players[model_name] = AIPlayer(board_size, mode)
+            ai_player = ai_players[model_name]
             if mode == 'triangular':
                 board = tri_fi.get_board(board_size)
                 move = ai_player.mcts_get_action(board, 1)
@@ -130,7 +127,7 @@ def confirm_move(request):
         move = data['move']
         turn = int(data['turn'])
         mode = data['game_mode']
-        print(data)
+        # print(data)
         if not data['ai_mode']:
             if mode == 'triangular':
                 return JsonResponse(tri_fi.perform_move(
@@ -146,14 +143,14 @@ def confirm_move(request):
         board_size = len(board[-1]) if mode == 'hexagonal' else len(board)
         if board_size >= 0:
             model_name = mode + str(board_size)
-            if model_name not in ai_players.keys():
-                ai_players['model_name'] = AIPlayer(board_size, mode)
-            ai_player = ai_players['model_name']
+            if model_name not in ai_players:
+                ai_players[model_name] = AIPlayer(board_size, mode)
+            ai_player = ai_players[model_name]
             if mode == 'triangular':
                 board_np = tri_dc.convert_triangle_to_numpy_array(board).astype(bool).astype(int)
                 move_np = tri_dc.convert_triangle_to_numpy_array(move).astype(bool).astype(int)
                 board_np = board_np + move_np
-                print(board_np)
+                # print(board_np)
                 next_move = ai_player.mcts_get_action(board_np, turn)
                 board = tri_dc.convert_numpy_array_to_triangle(board_np)
                 next_move = tri_dc.convert_numpy_array_to_triangle(next_move)
