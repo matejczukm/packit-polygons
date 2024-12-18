@@ -121,6 +121,7 @@ function revertMove() {
 function confirmMove() {
     if (confirmMoveButton._disabled) return;
     confirmMoveButton._disabled = true;
+    const startTime = Date.now();
 
     console.log('Board matrix:', boardMatrix)
     // console.log('Possible moves')
@@ -191,7 +192,10 @@ function confirmMove() {
             }
 
             disableClicks();
+
         }
+        const endTime = Date.now();
+        console.log(`Elapsed time: ${endTime - startTime} ms`);
         confirmMoveButton._disabled = false;
 
     })
@@ -201,6 +205,8 @@ function confirmMove() {
 }
 
 function startGame() {
+    const startTime = Date.now();
+
     const response = fetch( '/start_game/', {
         method: 'POST',
         headers: {
@@ -236,6 +242,8 @@ function startGame() {
                 winnerHeader.innerHTML = `Players ${(turn + 1) % 2 + 1} turn`;
             }
         confirmMoveButton._disabled = false;
+        const endTime = Date.now();
+        console.log(`Elapsed time: ${endTime - startTime} ms`);
 
 
     })
