@@ -1,12 +1,13 @@
 import datetime
 
 import numpy as np
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 import json
 import sys
 import os
+from .models import Game
 # from mcts_simple import UCT, MCTS
 import random
 
@@ -19,7 +20,7 @@ from our_packit.hexagonal_mode import frontend_interface as hex_fi
 from our_packit.triangular_mode import data_convertions as tri_dc
 
 sys.path.insert(0, './alpha-zero-general')
-from PackitAIPlayer import AIPlayer
+from PackitAIPlayerNoLocal import AIPlayer
 
 # ai = AIPlayer(4, 'triangular')
 ai_players = {}
@@ -38,29 +39,27 @@ def model_move(board, turn, game_mode):
 
 
 def hexagon(request):
-    # current_turn = 1
-    # context = {
-    #     'current_turn': current_turn,
-    # }
     return render(request, 'packitPolygons/hexagonal_board.html')
 
 
 def index(request):
-    # current_turn = 1
-    # context = {
-    #     'current_turn': current_turn,
-    # }
     return render(request, 'packitPolygons/index.html')
 
 
-# def apply_move(request):
-#     if request.method == 'POST':
-#         data = json.loads(request.body)
-#         board = data['board']
-#         move = data['move']
-#         turn = data['turn']
-#         return JsonResponse(tri_fi.perform_move(board, move, turn))
-
+@csrf_exempt
+def save_game(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        game = Game(
+            size=data['board_size'],
+            board=data['board'],
+            turns=data['turns'],
+            triangular_mode=data['game_mode'] == 'triangular',
+            ai_mode=data['ai_mode'],
+            ai_starts=data['ai_starts'] if data['ai_mode'] else None
+        )
+        game.save()
+        return HttpResponse(status=204)
 
 @csrf_exempt
 def start_new_game(request):
@@ -150,5 +149,3 @@ def confirm_move(request):
             move=next_move,
             turn=turn + 1
         ))
-
-

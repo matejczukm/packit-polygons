@@ -95,15 +95,27 @@ function unclickCell(i, j) {
     }
 }
 
-function disableClicks() {
+function toggleClicks(disable) {
     let cellClass = getGameMode() + '-cell';
-    // console.log(cellClass);
     let cells = document.getElementsByClassName(cellClass);
-    // console.log(cells[0]);
     Array.from(cells).forEach(cell => {
-        // cell.removeEventListener('click', onClickCell);
-        cell._disabled = true;
+        cell._disabled = disable;
     })
+}
+
+function getFinalBoard() {
+    let cellClass = getGameMode() + '-cell';
+    let cells = document.getElementsByClassName(cellClass);
+    let board = getBoardMatrix();
+    Array.from(cells).forEach(cell => {
+        if (cell.innerHTML) {
+            let cellId = cell.id.split(";");
+            let i = cellId[0];
+            let j = cellId[1];
+            board[i][j] = parseInt(cell.innerHTML);
+        }
+    })
+    return board;
 }
 
 function revertMove() {
@@ -122,18 +134,14 @@ function confirmMove() {
     if (confirmMoveButton._disabled) return;
     confirmMoveButton._disabled = true;
     const startTime = Date.now();
+    toggleClicks(true);
 
     console.log('Board matrix:', boardMatrix)
-    // console.log('Possible moves')
-    // console.log(possibleMoves);
-    // console.log('Current move')
-    // console.log(JSON.stringify(moveMatrix))
-    // console.log('Move is valid:')
-    // console.log(possibleMoves.includes(JSON.stringify(moveMatrix)))
     let moveMatrixJSON = JSON.stringify(moveMatrix);
     if (!possibleMoves.includes(moveMatrixJSON)) {
         alert('Not a valid move')
         revertMove();
+        confirmMoveButton._disabled = false;
         return;
     }
     turn ++;
@@ -162,11 +170,8 @@ function confirmMove() {
         console.log("Move confirmed:", data);
         possibleMoves = data.moves;
         boardMatrix = data.board;
-        // console.log(data.board)
-        // console.log('Current board', boardMatrix);
         if(updateCellsAfterMove()) {
             turn++;
-
         }
         if(possibleMoves.length > 0) {
             moveMatrix = getBoardMatrix();
@@ -180,22 +185,26 @@ function confirmMove() {
                 turnSpan.innerHTML = String(turn);
             }
         } else {
-            // alert('Game finished');
             let winnerHeader = document.getElementById('winner-header');
             winnerHeader.innerHTML = `Player ${turn % 2 + 1} wins!`;
             if (aiMode) {
                 if ((aiStarts && ((turn+1) % 2 === 1)) || (!aiStarts && ((turn+1) % 2 === 0)))  {
                     winnerHeader.innerHTML = `AI wins!`;
+                    let turnSpan = document.getElementById('turn-span');
+                    if (turnSpan) {
+                        turnSpan.innerHTML = String(turn-1);
+                    }
                 } else {
                     winnerHeader.innerHTML = `Player wins!`;
                 }
             }
-
-            disableClicks();
+            saveGame();
+            toggleClicks(true);
 
         }
         const endTime = Date.now();
         console.log(`Elapsed time: ${endTime - startTime} ms`);
+        toggleClicks(false);
         confirmMoveButton._disabled = false;
 
     })
@@ -204,8 +213,37 @@ function confirmMove() {
     });
 }
 
+function saveGame() {
+    const response = fetch( '/save_game/', {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json'
+        },
+        body : JSON.stringify({
+            board_size : getBoardDimension(),
+            game_mode : getGameMode(),
+            ai_starts : aiStarts,
+            ai_mode : aiMode,
+            board : getFinalBoard(),
+            turns : turn-1
+        }),
+        }
+    )
+    .then(response => {
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+    })
+    .catch(error => {
+        console.error("There was an error:", error);
+    });
+}
+
+
 function startGame() {
     const startTime = Date.now();
+    toggleClicks(true);
 
     const response = fetch( '/start_game/', {
         method: 'POST',
@@ -244,6 +282,7 @@ function startGame() {
         confirmMoveButton._disabled = false;
         const endTime = Date.now();
         console.log(`Elapsed time: ${endTime - startTime} ms`);
+        toggleClicks(false);
 
 
     })
