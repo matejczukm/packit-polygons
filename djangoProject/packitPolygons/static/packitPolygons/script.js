@@ -7,6 +7,37 @@ let cellBaseColor = '#bab1b5';
 let aiStarts = false;
 let aiMode = false;
 let confirmMoveButton = null;
+let prevClicked = null;
+
+function connectHorizontally(row, col1, col2) {
+    for (let i = col1 + 1; i < col2 ; i++) {
+        moveMatrix[i] = turn;
+        cellsClicked++;
+    }
+    updateCellsAfterMove(moveMatrix);
+}
+
+function hexConnectVertically(row1, col1, row2, col2) {
+    let counter = 1;
+    for (let i = row1+1; i < row2; i++) {
+        let j = i <= getBoardDimension() ? col1 + counter : col2;
+        moveMatrix[i][j] = 1
+        cellsClicked++;
+    }
+}
+
+function triConnectVertically(row1, col1, row2, col2) {
+
+}
+
+function connectVertically(row1, col1, row2, col2) {
+    if (getGameMode() === 'triangular') {
+        triConnectVertically(row1, col1, row2, col2);
+    } else {
+        hexConnectVertically(row1, col1, row2, col2);
+    }
+    updateCellsAfterMove(moveMatrix);
+}
 
 function startAiMode(doesAIStart) {
     // console.log(doesAIStart);
@@ -42,34 +73,38 @@ function onClickCell(row, col, cell) {
         alert('Cell already clicked');
         return;
     }
-    if(moveMatrix[row][col]) {
-        unclickCell(row, col);
-        moveMatrix[row][col] = 0;
-        cellsClicked--;
-        return;
+    if (prevClicked) {
+        if (row === prevClicked[0]) {
+            connectHorizontally(row, prevClicked[1], col);
+        } else {
+            connectVertically(prevClicked[0], prevClicked[1], row, col)
+        }
     }
-    cellsClicked ++;
-
-    if (cellsClicked > turn + 1) {
-        alert(`You can click at most ${turn+1} cells`);
-        cellsClicked--;
-        return;
-    }
-
-    // console.log(`Row: ${row}, col: ${col}`);
+    prevClicked = [row, col];
+    // if(moveMatrix[row][col]) {
+    //     unclickCell(row, col);
+    //     moveMatrix[row][col] = 0;
+    //     cellsClicked--;
+    //     return;
+    // }
+    // cellsClicked ++;
+    //
+    // if (cellsClicked > turn + 1) {
+    //     alert(`You can click at most ${turn+1} cells`);
+    //     cellsClicked--;
+    //     return;
+    // }
+    //
     moveMatrix[row][col] = turn;
-    // console.log(moveMatrix);
-    // console.log('Move matrix: ')
-    // console.log(JSON.stringify(moveMatrix))
-    cell.style.backgroundColor = getColorForTurn(turn);
-    cell.innerHTML = turn;
+    // cell.style.backgroundColor = getColorForTurn(turn);
+    // cell.innerHTML = turn;
 }
 
-function updateCellsAfterMove(board) {
+function updateCellsAfterMove(matrix) {
     let updated = false;
-    for (let i=0; i < boardMatrix.length; i++) {
-        for (let j = 0; j<boardMatrix[i].length; j++) {
-            if (boardMatrix[i][j]) {
+    for (let i=0; i < matrix.length; i++) {
+        for (let j = 0; j<matrix[i].length; j++) {
+            if (matrix[i][j]) {
                 let cellID = `${i};${j}`;
                 let cell = document.getElementById(cellID);
                 if (cell.innerHTML === '') {
@@ -170,7 +205,7 @@ function confirmMove() {
         console.log("Move confirmed:", data);
         possibleMoves = data.moves;
         boardMatrix = data.board;
-        if(updateCellsAfterMove()) {
+        if(updateCellsAfterMove(boardMatrix)) {
             turn++;
         }
         if(possibleMoves.length > 0) {
@@ -240,7 +275,6 @@ function saveGame() {
     });
 }
 
-
 function startGame() {
     const startTime = Date.now();
     toggleClicks(true);
@@ -268,7 +302,7 @@ function startGame() {
         console.log("Game started:", data);
         possibleMoves = data.moves;
         boardMatrix = data.board;
-        if(updateCellsAfterMove()) {
+        if(updateCellsAfterMove(boardMatrix)) {
             turn++;
             let turnSpan = document.getElementById('turn-span');
             if (turnSpan) {
@@ -400,6 +434,7 @@ function loadBoard() {
     //     modal.classList.remove("open");
     // });
 }
+
 function updateSizes() {
     // Updates the sizes of cells to maintain a consistent board size,
     // adjusting cell dimensions based on the number of cells or board dimensions.
