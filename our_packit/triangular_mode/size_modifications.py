@@ -90,7 +90,7 @@ def expand_polygon(i, a, b, c, n):
     Converts the encoded representation of a polygon into a all possible matrix-like representations of the polygon inside a triangle of size n.
     Each triangle of size i can be expanded to size n by adding 'j' triangles to the right,
     'k' triangles to the left, and 'l' triangles downward, where j + k + l = n - i.
-    We need to find all possible combinations of a, b, and c, and expand the triangle accordingly.
+    We need to find all possible combinations of j, k, and l, and expand the triangle accordingly.
 
     Args:
         i (int): The size of base triangle.
@@ -110,7 +110,7 @@ def expand_polygon(i, a, b, c, n):
     result = []
     for j in range(dif + 1):
         for k in range(dif + 1):
-            for l in range(dif + 1):  # There has to be a more efficient way, but I haven't discovered it yet.
+            for l in range(dif + 1):  
                 if j + k + l == dif:
                     result.append(expand_triangle(base_polygon.copy(), j, k, l))
     return result
