@@ -64,8 +64,6 @@ def get_unique_solutions(k):
         list[tuple[int]]: A list of tuples, where each tuple represents the encoding of suitable polygon.
     """
     solutions = []
-    # 4 nested loops might look scary, but since k won't be (much) greater than 10 (I think), it should be ok,
-    # at least for now.
     for i in get_range(k):
         for a in range(i):
             for b in range(a + 1):
@@ -87,8 +85,6 @@ def get_all_solutions(k):
         list[tuple[int]]: A list of tuples, where each tuple represents the encoding of suitable polygon.
     """
     solutions = []
-    # 5 nested loops might look even worse, but it's faster solution then the second approach (in
-    # alternative_functions.ipynb).
     for i in get_range(k):
         for a in range(i):
             for b in range(a + 1):
