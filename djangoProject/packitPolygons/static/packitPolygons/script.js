@@ -9,21 +9,45 @@ let aiMode = false;
 let confirmMoveButton = null;
 let prevClicked = null;
 
-function connectHorizontally(row, col1, col2) {
-    for (let i = col1 + 1; i < col2 ; i++) {
-        moveMatrix[i] = turn;
-        cellsClicked++;
+function connectHorizontally(r, col1, col2) {
+    let maxCol = Math.max(col1, col2);
+    let minCol = Math.min(col1, col2);
+    for (let i = minCol + 1; i < maxCol ; i++) {
+        if (!moveMatrix[r][i]) {
+            moveMatrix[r][i] = 1;
+            cellsClicked++;
+        }
     }
     updateCellsAfterMove(moveMatrix);
+    // console.log(cellsClicked);
 }
 
 function hexConnectVertically(row1, col1, row2, col2) {
+    // console.log(row1, col1, row2, col2);
     let counter = 1;
-    for (let i = row1+1; i < row2; i++) {
-        let j = i <= getBoardDimension() ? col1 + counter : col2;
-        moveMatrix[i][j] = 1
-        cellsClicked++;
+    if (row1 < row2 && col1 < col2 + (row2 > getBoardDimension())) {
+        // counter++;
+        for (let i = row1+1; i < row2; i++) {
+            let j = i < getBoardDimension() ? col1 + counter : col2;
+            counter++;
+            if (!moveMatrix[i][j]) {
+                moveMatrix[i][j] = 1
+                cellsClicked++;
+            }
+        }
+    } else if (row1 < row2 && col1 >= col2) {
+        for (let i = row2-1; i > row1; i--) {
+            let j = i < getBoardDimension() ? col1 : col2 + counter;
+            counter++;
+            if (!moveMatrix[i][j]) {
+                moveMatrix[i][j] = 1
+                cellsClicked++;
+            }
+        }
+    } else {
+        hexConnectVertically(row2, col2, row1, col1);
     }
+    // console.log(cellsClicked);
 }
 
 function triConnectVertically(row1, col1, row2, col2) {
@@ -35,6 +59,34 @@ function connectVertically(row1, col1, row2, col2) {
         triConnectVertically(row1, col1, row2, col2);
     } else {
         hexConnectVertically(row1, col1, row2, col2);
+    }
+    updateCellsAfterMove(moveMatrix);
+}
+
+function triFillPolygon() {
+
+}
+
+function hexFillPolygon() {
+    for (let i=0; i<moveMatrix.length; i++) {
+        const sum = moveMatrix[i].reduce((partialSum, a) => partialSum + a, 0);
+        if (sum !== 2) continue;
+        let start = 0;
+        for (let j=0; j<moveMatrix[i].length; j++) {
+            if (moveMatrix[i][j]) {
+                start = 1 - start;
+            } else {
+                moveMatrix[i][j] = start;
+            }
+        }
+    }
+}
+
+function fillPolygon() {
+    if (getGameMode() === 'triangular') {
+        triFillPolygon();
+    } else {
+        hexFillPolygon();
     }
     updateCellsAfterMove(moveMatrix);
 }
@@ -77,9 +129,12 @@ function onClickCell(row, col, cell) {
         if (row === prevClicked[0]) {
             connectHorizontally(row, prevClicked[1], col);
         } else {
-            connectVertically(prevClicked[0], prevClicked[1], row, col)
+            connectVertically(prevClicked[0], prevClicked[1], row, col);
         }
     }
+    // else {
+    //     cellsClicked ++;
+    // }
     prevClicked = [row, col];
     // if(moveMatrix[row][col]) {
     //     unclickCell(row, col);
@@ -87,7 +142,6 @@ function onClickCell(row, col, cell) {
     //     cellsClicked--;
     //     return;
     // }
-    // cellsClicked ++;
     //
     // if (cellsClicked > turn + 1) {
     //     alert(`You can click at most ${turn+1} cells`);
@@ -95,9 +149,16 @@ function onClickCell(row, col, cell) {
     //     return;
     // }
     //
-    moveMatrix[row][col] = turn;
-    // cell.style.backgroundColor = getColorForTurn(turn);
-    // cell.innerHTML = turn;
+    if (moveMatrix[row][col]) {
+        alert('zaznaczone');
+        fillPolygon();
+    } else {
+        cellsClicked++;
+    }
+    moveMatrix[row][col] = 1;
+    cell.style.backgroundColor = getColorForTurn(turn);
+    cell.innerHTML = turn;
+    console.log(cellsClicked);
 }
 
 function updateCellsAfterMove(matrix) {
