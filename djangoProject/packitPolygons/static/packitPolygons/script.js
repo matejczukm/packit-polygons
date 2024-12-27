@@ -51,6 +51,44 @@ function hexConnectVertically(row1, col1, row2, col2) {
 }
 
 function triConnectVertically(row1, col1, row2, col2) {
+    if (row1 < row2 &&  col1 >= col2 || row1 < row2 && (row2-row1) > (col2-col1)) {
+        let rowLength = moveMatrix[row1].length;
+        let counter = rowLength - col1;
+        if (col1 % 2) {
+            moveMatrix[row1][rowLength - counter -1] = 1;
+            counter++;
+        }
+        for (let i=row1+1; i <= row2; i++) {
+            rowLength = moveMatrix[i].length;
+            if (i !== row2 || (rowLength - counter - 1) >= col2) {
+                moveMatrix[i][rowLength - counter - 1] = 1;
+                counter++;
+            }
+            if (i !== row2 || (rowLength - counter - 1) >= col2) {
+                moveMatrix[i][rowLength - counter -1] = 1;
+                counter++;
+            }
+        }
+    } else if (row1 < row2 && col1 < col2) {
+        let counter = 1;
+        if (col1 % 2) {
+            moveMatrix[row1][col1+counter] = 1;
+            counter++;
+        }
+        for (let i=row1+1; i <= row2; i++) {
+            if (col1+counter <= col2) {
+                moveMatrix[i][col1+counter] = 1;
+                counter++;
+            }
+            if (col1+counter <= col2) {
+                moveMatrix[i][col1+counter] = 1;
+                counter++;
+            }
+        }
+    } else {
+        triConnectVertically(row2, col2, row1, col1);
+    }
+    updateCellsAfterMove(moveMatrix);
 
 }
 
@@ -63,9 +101,7 @@ function connectVertically(row1, col1, row2, col2) {
     updateCellsAfterMove(moveMatrix);
 }
 
-function triFillPolygon() {
 
-}
 
 function hexFillPolygon() {
     for (let i=0; i<moveMatrix.length; i++) {
@@ -77,6 +113,20 @@ function hexFillPolygon() {
                 start = 1 - start;
             } else {
                 moveMatrix[i][j] = start;
+            }
+        }
+    }
+}
+function triFillPolygon() {
+    for (let i=0; i<moveMatrix.length; i++) {
+        const sum = moveMatrix[i].reduce((partialSum, a) => partialSum + a, 0);
+        if (sum !== 4) continue;
+        let start = 0;
+        for (let j=0; j<moveMatrix[i].length; j++) {
+            if (moveMatrix[i][j]) {
+                start++;
+            } else {
+                moveMatrix[i][j] = start && start < 4 ? 1 : 0;
             }
         }
     }
@@ -150,7 +200,7 @@ function onClickCell(row, col, cell) {
     // }
     //
     if (moveMatrix[row][col]) {
-        alert('zaznaczone');
+        // alert('zaznaczone');
         fillPolygon();
     } else {
         cellsClicked++;
@@ -158,7 +208,7 @@ function onClickCell(row, col, cell) {
     moveMatrix[row][col] = 1;
     cell.style.backgroundColor = getColorForTurn(turn);
     cell.innerHTML = turn;
-    console.log(cellsClicked);
+    // console.log(cellsClicked);
 }
 
 function updateCellsAfterMove(matrix) {
@@ -217,13 +267,15 @@ function getFinalBoard() {
 function revertMove() {
     for(let i=0; i < moveMatrix.length; i++) {
         for(let j = 0; j<moveMatrix[i].length; j++) {
-            if (moveMatrix[i][j] === turn) {
+            if (moveMatrix[i][j]) {
                 unclickCell(i, j);
             }
         }
     }
     moveMatrix = getBoardMatrix();
     cellsClicked = 0;
+    prevClicked = null;
+    toggleClicks(false);
 }
 
 function confirmMove() {
@@ -232,7 +284,8 @@ function confirmMove() {
     const startTime = Date.now();
     toggleClicks(true);
 
-    console.log('Board matrix:', boardMatrix)
+    console.log('Board matrix:', boardMatrix);
+    console.log('Move matrix:', moveMatrix);
     let moveMatrixJSON = JSON.stringify(moveMatrix);
     if (!possibleMoves.includes(moveMatrixJSON)) {
         alert('Not a valid move')
@@ -302,6 +355,7 @@ function confirmMove() {
         console.log(`Elapsed time: ${endTime - startTime} ms`);
         toggleClicks(false);
         confirmMoveButton._disabled = false;
+        prevClicked = null;
 
     })
     .catch(error => {
@@ -310,31 +364,42 @@ function confirmMove() {
 }
 
 function saveGame() {
-    const response = fetch( '/save_game/', {
+    fetch('/save_game/', {
         method: 'POST',
         headers: {
-        'Content-Type': 'application/json'
+            'Content-Type': 'application/json'
         },
-        body : JSON.stringify({
-            board_size : getBoardDimension(),
-            game_mode : getGameMode(),
-            ai_starts : aiStarts,
-            ai_mode : aiMode,
-            board : getFinalBoard(),
-            turns : turn-1
+        body: JSON.stringify({
+            board_size: getBoardDimension(),
+            game_mode: getGameMode(),
+            ai_starts: aiStarts,
+            ai_mode: aiMode,
+            board: getFinalBoard(),
+            turns: turn - 1
         }),
-        }
-    )
+    })
     .then(response => {
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return response.json();
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        if (response.status === 204) {
+            console.log("Game saved successfully, no content returned.");
+            return null;
+        }
+
+        return response.json();
+    })
+    .then(data => {
+        if (data) {
+            console.log("Response data:", data);
+        }
     })
     .catch(error => {
         console.error("There was an error:", error);
     });
 }
+
 
 function startGame() {
     const startTime = Date.now();
@@ -476,6 +541,7 @@ function generateGrid() {
     winnerHeader.innerHTML = '';
     confirmMoveButton = document.getElementsByClassName('move-button')[0];
     confirmMoveButton._disabled = true;
+    prevClicked = null;
 }
 
 function loadBoard() {
