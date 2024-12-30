@@ -19,14 +19,21 @@ function connectHorizontally(r, col1, col2) {
         }
     }
     updateCellsAfterMove(moveMatrix);
-    // console.log(cellsClicked);
 }
 
 function hexConnectVertically(row1, col1, row2, col2) {
-    // console.log(row1, col1, row2, col2);
+    console.log(row1, col1, row2, col2);
     let counter = 1;
-    if (row1 < row2 && col1 < col2 + (row2 > getBoardDimension())) {
-        // counter++;
+    if (col1 < col2 + (row2 > getBoardDimension())) {
+        // let halfSize = Math.floor(getBoardDimension() / 2);
+        let diff = row1 < getBoardDimension() ? getBoardDimension() - row1 - 1 : 0;
+        // console.log(diff);
+        if (col1+diff === col2) {
+            // console.log('ok');
+        } else {
+            alert('Cannot connect the selected cells.');
+            return false;
+        }
         for (let i = row1+1; i < row2; i++) {
             let j = i < getBoardDimension() ? col1 + counter : col2;
             counter++;
@@ -35,7 +42,15 @@ function hexConnectVertically(row1, col1, row2, col2) {
                 cellsClicked++;
             }
         }
-    } else if (row1 < row2 && col1 >= col2) {
+    } else if (col1 >= col2) {
+        let diff = row1 < getBoardDimension() ? getBoardDimension() - row1 - 1 : 0;
+        // console.log(moveMatrix[row1].length - col1 + diff, moveMatrix[row2].length - col2);
+        if (moveMatrix[row1].length - col1 + diff === moveMatrix[row2].length - col2) {
+            // console.log('ok');
+        } else {
+            alert('Cannot connect the selected cells.');
+            return false;
+        }
         for (let i = row2-1; i > row1; i--) {
             let j = i < getBoardDimension() ? col1 : col2 + counter;
             counter++;
@@ -44,14 +59,22 @@ function hexConnectVertically(row1, col1, row2, col2) {
                 cellsClicked++;
             }
         }
-    } else {
-        hexConnectVertically(row2, col2, row1, col1);
     }
-    // console.log(cellsClicked);
+    else {
+        alert('Something went wrong.');
+    }
+    return true;
+
 }
 
 function triConnectVertically(row1, col1, row2, col2) {
-    if (row1 < row2 &&  col1 >= col2 || row1 < row2 && (row2-row1) > (col2-col1)) {
+    if (col1 >= col2 || (row2-row1) > (col2-col1)) {
+        if (col2 === col1 || (col1 % 2 === 0) && col2-col1 === 1 || (col1 % 2 === 1) && col1-col2 === 1) {
+            // console.log('ok');
+        } else {
+            alert('Cannot connect the selected cells.');
+            return false;
+        }
         let rowLength = moveMatrix[row1].length;
         let counter = rowLength - col1;
         if (col1 % 2) {
@@ -69,7 +92,13 @@ function triConnectVertically(row1, col1, row2, col2) {
                 counter++;
             }
         }
-    } else if (row1 < row2 && col1 < col2) {
+    } else if (col1 < col2) {
+        if ((Math.floor((col2-col1)/(row2-row1)) === 2 && col1 % 2) || (Math.ceil((col2-col1)/(row2-row1)) === 2 && col1 % 2 === 0)) {
+            // console.log('ok');
+        } else {
+            alert('Cannot connect the selected cells.');
+            return false;
+        }
         let counter = 1;
         if (col1 % 2) {
             moveMatrix[row1][col1+counter] = 1;
@@ -85,20 +114,26 @@ function triConnectVertically(row1, col1, row2, col2) {
                 counter++;
             }
         }
-    } else {
-        triConnectVertically(row2, col2, row1, col1);
     }
-    updateCellsAfterMove(moveMatrix);
+    else {
+        alert('Something went wrong.');
+    }
+    return true;
 
 }
 
 function connectVertically(row1, col1, row2, col2) {
+    if (row2 < row1) {
+        return connectVertically(row2, col2, row1, col1);
+    }
+    let isOk;
     if (getGameMode() === 'triangular') {
-        triConnectVertically(row1, col1, row2, col2);
+        isOk = triConnectVertically(row1, col1, row2, col2);
     } else {
-        hexConnectVertically(row1, col1, row2, col2);
+        isOk = hexConnectVertically(row1, col1, row2, col2);
     }
     updateCellsAfterMove(moveMatrix);
+    return isOk;
 }
 
 
@@ -126,7 +161,7 @@ function triFillPolygon() {
             if (moveMatrix[i][j]) {
                 start++;
             } else {
-                moveMatrix[i][j] = start && start < 4 ? 1 : 0;
+                moveMatrix[i][j] = (start && start < 4) ? 1 : 0;
             }
         }
     }
@@ -175,12 +210,20 @@ function onClickCell(row, col, cell) {
         alert('Cell already clicked');
         return;
     }
+    let canConnect = true;
+    let cellBefore = moveMatrix[row][col];
     if (prevClicked) {
         if (row === prevClicked[0]) {
             connectHorizontally(row, prevClicked[1], col);
         } else {
-            connectVertically(prevClicked[0], prevClicked[1], row, col);
+            canConnect = connectVertically(prevClicked[0], prevClicked[1], row, col);
+            // if (getGameMode() === 'triangular' && ()) {
+            //
+            // }
         }
+    }
+    if (!canConnect) {
+        return;
     }
     // else {
     //     cellsClicked ++;
@@ -199,8 +242,7 @@ function onClickCell(row, col, cell) {
     //     return;
     // }
     //
-    if (moveMatrix[row][col]) {
-        // alert('zaznaczone');
+    if (cellBefore) {
         fillPolygon();
     } else {
         cellsClicked++;
@@ -208,7 +250,6 @@ function onClickCell(row, col, cell) {
     moveMatrix[row][col] = 1;
     cell.style.backgroundColor = getColorForTurn(turn);
     cell.innerHTML = turn;
-    // console.log(cellsClicked);
 }
 
 function updateCellsAfterMove(matrix) {
@@ -404,6 +445,10 @@ function saveGame() {
 function startGame() {
     const startTime = Date.now();
     toggleClicks(true);
+    let winnerHeader = document.getElementById('winner-header');
+    if (aiMode && aiStarts) {
+        setTimeout(() => {winnerHeader.innerHTML = 'Loading model';}, 0);
+    }
 
     const response = fetch( '/start_game/', {
         method: 'POST',
@@ -436,9 +481,10 @@ function startGame() {
             }
         }
         if (!aiMode) {
-                let winnerHeader = document.getElementById('winner-header');
-                winnerHeader.innerHTML = `Players ${(turn + 1) % 2 + 1} turn`;
-            }
+            winnerHeader.innerHTML = `Players ${(turn + 1) % 2 + 1} turn`;
+        } else {
+            winnerHeader.innerHTML = '';
+        }
         confirmMoveButton._disabled = false;
         const endTime = Date.now();
         console.log(`Elapsed time: ${endTime - startTime} ms`);
