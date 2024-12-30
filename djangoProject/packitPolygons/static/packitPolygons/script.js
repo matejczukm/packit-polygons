@@ -645,9 +645,9 @@ function updateSizes() {
     let hexGrid = document.querySelector('.hexagonal-grid');
     let triGrid = document.querySelector('.triangular-grid');
     if (hexGrid) {
-        hexGrid.style.setProperty('--s', 280/dim + 'px')
+        hexGrid.style.setProperty('--s', 240/dim + 'px')
     } else if (triGrid) {
-        triGrid.style.setProperty('--s', 390/dim + 'px')
+        triGrid.style.setProperty('--s', 350/dim + 'px')
     }
     console.log(boardMatrix);
 }
