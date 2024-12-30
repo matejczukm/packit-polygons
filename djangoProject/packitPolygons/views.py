@@ -20,7 +20,7 @@ from our_packit.hexagonal_mode import frontend_interface as hex_fi
 from our_packit.triangular_mode import data_convertions as tri_dc
 
 sys.path.insert(0, './alpha-zero-general')
-from PackitAIPlayerNoLocal import AIPlayer
+from PackitAIPlayer import AIPlayer
 
 # ai = AIPlayer(4, 'triangular')
 ai_players = {}
