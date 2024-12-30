@@ -1,4 +1,5 @@
 let boardMatrix = null;
+let boardMatrixFullInformation = null;
 let moveMatrix = null;
 let cellsClicked = 0;
 let turn = 1;
@@ -25,14 +26,18 @@ function hexConnectVertically(row1, col1, row2, col2) {
     let counter = 1;
     let diff = row1 < getBoardDimension() ? getBoardDimension() - row1 - 1 : 0;
     let diff2 = row2 < getBoardDimension() ? getBoardDimension() - row2 - 1 : 0;
-    if (col1 < col2 + (row2 > getBoardDimension())) { // leaning towards left
+    // leaning towards left
+    if (col1 < col2 + (row2 >= getBoardDimension()) ||
+    0
+    ) {
+
         // let diff = row1 < getBoardDimension() ? getBoardDimension() - row1 - 1 : 0;
         // let diff2 = row2 < getBoardDimension() ? getBoardDimension() - row2 - 1 : 0;
 
         // diff = row2 < getBoardDimension() ? 0 : diff;
         console.log(diff, diff2);
 
-        // console.log(diff);
+        // console.log(diff, diff2);
         if (col1+diff === col2+diff2) {
             // console.log('ok');
         } else {
@@ -53,6 +58,8 @@ function hexConnectVertically(row1, col1, row2, col2) {
 
         // diff = row2 < getBoardDimension() ? 0 : diff;
         // console.log(moveMatrix[row1].length - col1 + diff, moveMatrix[row2].length - col2);
+        console.log(diff, diff2, 'es');
+
         if (moveMatrix[row1].length - col1 + diff === moveMatrix[row2].length - col2 + diff2) {
             // console.log('ok');
         } else {
@@ -294,8 +301,8 @@ function unclickCell(i, j) {
     let cellID = `${i};${j}`;
     let cell = document.getElementById(cellID);
     if (boardMatrix[i][j]) {
-        cell.innerHTML = boardMatrix[i][j];
-        cell.style.backgroundColor = getColorForTurn(boardMatrix[i][j]);
+        cell.innerHTML = boardMatrixFullInformation[i][j];
+        cell.style.backgroundColor = getColorForTurn(boardMatrixFullInformation[i][j]);
     } else {
         cell.innerHTML = '';
         cell.style.backgroundColor = cellBaseColor;
@@ -310,7 +317,7 @@ function toggleClicks(disable) {
     })
 }
 
-function getFinalBoard() {
+function getFullInformationBoard() {
     let cellClass = getGameMode() + '-cell';
     let cells = document.getElementsByClassName(cellClass);
     let board = getBoardMatrix();
@@ -417,6 +424,7 @@ function confirmMove() {
         toggleClicks(false);
         confirmMoveButton._disabled = false;
         prevClicked = null;
+        boardMatrixFullInformation = getFullInformationBoard();
 
     })
     .catch(error => {
@@ -435,7 +443,7 @@ function saveGame() {
             game_mode: getGameMode(),
             ai_starts: aiStarts,
             ai_mode: aiMode,
-            board: getFinalBoard(),
+            board: getFullInformationBoard(),
             turns: turn - 1
         }),
     })
@@ -509,6 +517,7 @@ function startGame() {
         const endTime = Date.now();
         console.log(`Elapsed time: ${endTime - startTime} ms`);
         toggleClicks(false);
+        boardMatrixFullInformation = getFullInformationBoard();
 
 
     })
@@ -594,6 +603,7 @@ function generateGrid() {
         }
     }
     boardMatrix = getBoardMatrix();
+    boardMatrixFullInformation = getBoardMatrix();
     moveMatrix = getBoardMatrix();
     cellsClicked = 0;
     turn = 1;
@@ -613,7 +623,7 @@ function generateGrid() {
 function loadBoard() {
     // on load function
     generateGrid();
-    boardMatrix = getBoardMatrix();
+    // boardMatrix = getBoardMatrix();
 
     const openBtn = document.getElementById("openModal");
     const closeBtn = document.getElementById("closeModal");
