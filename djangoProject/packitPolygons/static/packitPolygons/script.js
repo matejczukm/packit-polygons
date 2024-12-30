@@ -23,11 +23,17 @@ function connectHorizontally(r, col1, col2) {
 
 function hexConnectVertically(row1, col1, row2, col2) {
     let counter = 1;
-    if (col1 < col2 + (row2 > getBoardDimension())) {
-        // let halfSize = Math.floor(getBoardDimension() / 2);
-        let diff = row1 < getBoardDimension() ? getBoardDimension() - row1 - 1 : 0;
+    let diff = row1 < getBoardDimension() ? getBoardDimension() - row1 - 1 : 0;
+    let diff2 = row2 < getBoardDimension() ? getBoardDimension() - row2 - 1 : 0;
+    if (col1 < col2 + (row2 > getBoardDimension())) { // leaning towards left
+        // let diff = row1 < getBoardDimension() ? getBoardDimension() - row1 - 1 : 0;
+        // let diff2 = row2 < getBoardDimension() ? getBoardDimension() - row2 - 1 : 0;
+
+        // diff = row2 < getBoardDimension() ? 0 : diff;
+        console.log(diff, diff2);
+
         // console.log(diff);
-        if (col1+diff === col2) {
+        if (col1+diff === col2+diff2) {
             // console.log('ok');
         } else {
             alert('Cannot connect the selected cells.');
@@ -42,9 +48,12 @@ function hexConnectVertically(row1, col1, row2, col2) {
             }
         }
     } else if (col1 >= col2) {
-        let diff = row1 < getBoardDimension() ? getBoardDimension() - row1 - 1 : 0;
+        // let diff = row1 < getBoardDimension() ? getBoardDimension() - row1 - 1 : 0;
+        // let diff2 = row2 < getBoardDimension() ? getBoardDimension() - row2 - 1 : 0;
+
+        // diff = row2 < getBoardDimension() ? 0 : diff;
         // console.log(moveMatrix[row1].length - col1 + diff, moveMatrix[row2].length - col2);
-        if (moveMatrix[row1].length - col1 + diff === moveMatrix[row2].length - col2) {
+        if (moveMatrix[row1].length - col1 + diff === moveMatrix[row2].length - col2 + diff2) {
             // console.log('ok');
         } else {
             alert('Cannot connect the selected cells.');
@@ -92,11 +101,18 @@ function triConnectVertically(row1, col1, row2, col2) {
             }
         }
     } else if (col1 < col2) {
-        if ((Math.floor((col2-col1)/(row2-row1)) === 2 && col1 % 2) ||
-            (Math.ceil((col2-col1)/(row2-row1)) === 2 && col1 % 2 === 0) ||
-            row2-row1 === 1 && col2-col1 === 1
+        // console.log((col2-col1)/(row2-row1));
+        // if ((Math.floor((col2-col1)/(row2-row1)) === 2 && col1 % 2) ||
+        //     (Math.ceil((col2-col1)/(row2-row1)) === 2 && col1 % 2 === 0) ||
+        //     row2-row1 === 1 && col2-col1 === 1
+        // ) {
+        let c1 = moveMatrix[row1].length - col1;
+        let c2 = moveMatrix[row2].length - col2;
+        if (c1 === c2 ||
+            (col1 % 2 === 0) && c2-c1 === 1 ||
+            (col1 % 2 === 1) && c1-c2 === 1
         ) {
-            // console.log('ok');
+            console.log('ok');
         } else {
             alert('Cannot connect the selected cells.');
             return false;
@@ -125,6 +141,8 @@ function triConnectVertically(row1, col1, row2, col2) {
 }
 
 function connectVertically(row1, col1, row2, col2) {
+    console.log(row1, col1, row2, col2);
+
     if (row2 < row1) {
         return connectVertically(row2, col2, row1, col1);
     }
