@@ -17,7 +17,7 @@ if PARENT_DIR not in sys.path:
     sys.path.append(PARENT_DIR)
 from our_packit.triangular_mode import frontend_interface as tri_fi
 from our_packit.hexagonal_mode import frontend_interface as hex_fi
-from our_packit.triangular_mode import data_convertions as tri_dc
+from our_packit.triangular_mode import data_conversions as tri_dc
 
 sys.path.insert(0, './alpha-zero-general')
 from PackitAIPlayer import AIPlayer
@@ -26,16 +26,16 @@ from PackitAIPlayer import AIPlayer
 ai_players = {}
 
 
-def model_move(board, turn, game_mode):
-    if game_mode == 'triangular':
-        moves = tri_fi.get_possible_moves(board, turn)
-    else:
-        moves = hex_fi.get_possible_placements_for_turn(board, turn)
-    # updated_board = board + random.choice(moves)
-    # return updated_board
-    if moves:
-        return random.choice(moves)
-    return np.zeros_like(board)
+# def model_move(board, turn, game_mode):
+#     if game_mode == 'triangular':
+#         moves = tri_fi.get_possible_moves(board, turn)
+#     else:
+#         moves = hex_fi.get_possible_placements_for_turn(board, turn)
+#     # updated_board = board + random.choice(moves)
+#     # return updated_board
+#     if moves:
+#         return random.choice(moves)
+#     return np.zeros_like(board)
 
 
 def hexagon(request):

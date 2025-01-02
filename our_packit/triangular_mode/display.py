@@ -1,4 +1,4 @@
-from . import data_convertions as dc
+from . import data_conversions as dc
 
 
 def print_triangle(triangle):

@@ -1,7 +1,7 @@
-from . import data_convertions as dc
+from . import data_conversions as dc
 from . import size_modifications as sm
 from . import polygon_creation as pc
-from .display import print_numpy_triangle
+from .display import print_board
 import numpy as np
 
 
@@ -126,18 +126,18 @@ def play(board_size):
         moves_dict = {i: move for i, move in enumerate(moves)}
         for i, move in moves_dict.items():
             print(f'Move {i}:')
-            print_numpy_triangle(move)
+            print_board(move)
         print('Board: ')
-        print_numpy_triangle(board)
+        print_board(board)
         chosen_move = int(input('Choose move number: '))
         board = place_polygon(board, moves_dict[chosen_move])
         turn += 1
         moves = get_possible_moves(board, turn)
         print('Board: ')
-        print_numpy_triangle(board)
+        print_board(board)
     print(f'Player {1 + turn % 2} wins after {turn - 1} turns')
     print('Board: ')
-    print_numpy_triangle(board)
+    print_board(board)
     return
 
 

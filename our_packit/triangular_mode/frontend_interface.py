@@ -1,6 +1,6 @@
 from .game_logic import place_polygon, get_possible_moves, get_board
 import json
-from . import data_convertions as dc
+from . import data_conversions as dc
 
 
 def start_game(board_size):

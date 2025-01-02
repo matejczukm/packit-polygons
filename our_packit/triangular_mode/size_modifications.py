@@ -1,4 +1,4 @@
-from . import data_convertions as dc
+from . import data_conversions as dc
 from . import polygon_creation as pc
 
 
@@ -37,7 +37,9 @@ def expand_to_left(triangle, k):
         list[list[int]]: A matrix-like representation of expanded triangle.
     """
     for i in range(len(triangle)):
-        triangle[i] = [0, 0] * k + triangle[i]
+        # triangle[i] = [0, 0] * k + triangle[i]
+        triangle[i] = [0 for _ in range(2*k)] + triangle[i]
+
     top_part = pc.get_triangle_matrix(k)
     top_part.extend(triangle)
     return top_part
@@ -57,7 +59,8 @@ def expand_to_right(triangle, k):
         list[list[int]]: A matrix-like representation of expanded triangle.
     """
     for i in range(len(triangle)):
-        triangle[i] = triangle[i] + [0, 0] * k
+        # triangle[i] = triangle[i] + [0, 0] * k
+        triangle[i] = triangle[i] + [0 for _ in range(2*k)] 
     top_part = pc.get_triangle_matrix(k)
     top_part.extend(triangle)
     return top_part
