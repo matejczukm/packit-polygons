@@ -401,6 +401,8 @@ function confirmMove() {
             if (turnSpan) {
                 turnSpan.innerHTML = String(turn);
             }
+            toggleClicks(false);
+            confirmMoveButton._disabled = false;
         } else {
             let winnerHeader = document.getElementById('winner-header');
             winnerHeader.innerHTML = `Player ${turn % 2 + 1} wins!`;
@@ -421,8 +423,6 @@ function confirmMove() {
         }
         const endTime = Date.now();
         console.log(`Elapsed time: ${endTime - startTime} ms`);
-        toggleClicks(false);
-        confirmMoveButton._disabled = false;
         prevClicked = null;
         boardMatrixFullInformation = getFullInformationBoard();
 
