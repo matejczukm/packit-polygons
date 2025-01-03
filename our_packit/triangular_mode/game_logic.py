@@ -104,10 +104,27 @@ def get_board(board_size):
         board_size (int): The size of the board.
 
     Returns:
-        numpy.ndarray:
+        numpy.ndarray: A NumPy array representing the initial state of the board.
     """
     return dc.convert_triangle_to_numpy_array(
         pc.get_triangle_matrix(board_size)
+    )
+
+
+def validate_placements(placements, board):
+    """
+    Validates an array of placements.
+
+    Args:
+        placements (numpy.ndarray): A NumPy array of placements of polygons.
+        board (numpy.ndarray): A NumPy array representing the current state of the board.
+
+    Returns:
+        numpy.ndarray: Binary vector indicating which placement is valid.
+    """
+
+    return np.array(
+        [is_placement_valid(board, placement) for placement in placements]
     )
 
 
@@ -118,6 +135,8 @@ def play(board_size):
     Args:
         board_size (int): The size of the board.
 
+    Returns:
+        None
     """
     board = get_board(board_size)
     turn = 1
