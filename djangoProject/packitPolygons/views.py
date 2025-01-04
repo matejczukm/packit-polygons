@@ -20,7 +20,7 @@ if PARENT_DIR not in sys.path:
 # from our_packit.triangular_mode import data_conversions as tri_dc
 # from our_packit.hexagonal_mode import data_conversions as hex_dc
 #
-# sys.path.insert(0, './alpha_zero_general')
+# sys.path.insert(0, './alpha-zero-general')
 # from PackitAIPlayer import AIPlayer
 #
 # # ai = AIPlayer(4, 'triangular')
