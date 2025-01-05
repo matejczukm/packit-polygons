@@ -14,7 +14,6 @@ def index(request):
     return render(request, 'packitPolygons/index.html')
 
 
-@csrf_exempt
 def save_game(request):
     if request.method == 'POST':
         data = json.loads(request.body)
@@ -30,7 +29,6 @@ def save_game(request):
         return HttpResponse(status=204)
 
 
-@csrf_exempt
 def start_new_game(request):
     if request.method == 'POST':
         data = json.loads(request.body)
@@ -39,7 +37,6 @@ def start_new_game(request):
         )
 
 
-@csrf_exempt
 def confirm_move(request):
     if request.method == 'POST':
         data = json.loads(request.body)

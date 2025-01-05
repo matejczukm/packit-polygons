@@ -365,7 +365,8 @@ function confirmMove() {
     const response = fetch( '/confirm_move/', {
         method: 'POST',
         headers: {
-        'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken,
         },
         body : JSON.stringify({
             board : boardMatrix,
@@ -436,7 +437,8 @@ function saveGame() {
     fetch('/save_game/', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken,
         },
         body: JSON.stringify({
             board_size: getBoardDimension(),
@@ -481,7 +483,8 @@ function startGame() {
     const response = fetch( '/start_game/', {
         method: 'POST',
         headers: {
-        'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken,
         },
         body : JSON.stringify({
             board_size : getBoardDimension(),
