@@ -1,22 +1,31 @@
 {% extends "packitPolygons/base.html" %}
 {% block content %}
-<!--<div class="modal" id="modal">-->
-<!--    <div class="modal-inner">-->
-<!--        <h2>How to Play</h2>-->
-<!--        <p>-->
-<!--            Polygonal PackIt-->
-<!--        </p>-->
-<!--        <ol>-->
-<!--            <li>-->
-<!--                Tile is placeable in turn <em>i</em> if it consists of <em>i</em> or <em>i+1</em> triangles.-->
-<!--            </li>-->
-<!--            <li>-->
+<div class="modal" id="modal">
+    <div class="modal-inner">
+        <h2>How to Play</h2>
+        <p>
+            Polygonal PackIt
+        </p>
+        <ol>
+            <li>
+                A tile can be placed during turn <em>i</em> if it consists of <em>i</em> or <em>i+1</em> triangles, is a convex polygon
+                and doesn't overlap with other tiles.
+            </li>
+            <li>
+                The player who places the last tile wins the game.
+            </li>
+            <li>
+                To create a tile, select each corner in the correct order, so they can be connected with horizontal or tilted vertical lines. To finish the outline, click on the already selected corner to trigger the tile's fill.
+                <br>
+                Once the tile is correctly formed, confirm the move by clicking the <em>Confirm move</em> button.
+                <br>
+                If you want to cancel the move, use the <em>Undo move</em> button.
+            </li>
+        </ol>
 
-<!--            </li>-->
-<!--        </ol>-->
-<!--        <button id="closeModal">Close</button>-->
-<!--    </div>-->
-<!--</div>-->
+        <button id="closeModal">Close</button>
+    </div>
+</div>
 <div class="board">
         <div class="triangular-grid">
             <div class="triangular-row">
