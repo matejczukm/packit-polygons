@@ -1,0 +1,3 @@
+recursive-include packitPolygons/static *
+recursive-include packitPolygons/templates *
+recursive-include packitPolygons/migrations *.py

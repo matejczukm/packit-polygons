@@ -11,10 +11,12 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 import os
 
-load_dotenv()
+from django.core.management.utils import get_random_secret_key
+
+# load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,7 +26,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY')
+# SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = 'fc_cq_b_1(czj=5kbe2wd(j6w(gczk2a#=i_mim_!w3p*7hm@)'
+# SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
+# SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "fallback-secret-key")
+# print("SECRET_KEY before setup:", os.environ.get("DJANGO_SECRET_KEY"))
+
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -104,12 +112,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# CACHES = {
-#     "default": {
-#         "BACKEND": "django.core.cache.backends.redis.RedisCache",
-#         "LOCATION": "redis://127.0.0.1:6379/1",
-#     }
-# }
 
 
 

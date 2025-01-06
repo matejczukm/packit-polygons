@@ -418,7 +418,7 @@ function confirmMove() {
                     winnerHeader.innerHTML = `Player wins!`;
                 }
             }
-            saveGame();
+            // saveGame();
             toggleClicks(true);
 
         }
@@ -433,43 +433,43 @@ function confirmMove() {
     });
 }
 
-function saveGame() {
-    fetch('/save_game/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrfToken,
-        },
-        body: JSON.stringify({
-            board_size: getBoardDimension(),
-            game_mode: getGameMode(),
-            ai_starts: aiStarts,
-            ai_mode: aiMode,
-            board: getFullInformationBoard(),
-            turns: turn - 1
-        }),
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        if (response.status === 204) {
-            console.log("Game saved successfully, no content returned.");
-            return null;
-        }
-
-        return response.json();
-    })
-    .then(data => {
-        if (data) {
-            console.log("Response data:", data);
-        }
-    })
-    .catch(error => {
-        console.error("There was an error:", error);
-    });
-}
+// function saveGame() {
+//     fetch('/save_game/', {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json',
+//             'X-CSRFToken': csrfToken,
+//         },
+//         body: JSON.stringify({
+//             board_size: getBoardDimension(),
+//             game_mode: getGameMode(),
+//             ai_starts: aiStarts,
+//             ai_mode: aiMode,
+//             board: getFullInformationBoard(),
+//             turns: turn - 1
+//         }),
+//     })
+//     .then(response => {
+//         if (!response.ok) {
+//             throw new Error(`HTTP error! status: ${response.status}`);
+//         }
+//
+//         if (response.status === 204) {
+//             console.log("Game saved successfully, no content returned.");
+//             return null;
+//         }
+//
+//         return response.json();
+//     })
+//     .then(data => {
+//         if (data) {
+//             console.log("Response data:", data);
+//         }
+//     })
+//     .catch(error => {
+//         console.error("There was an error:", error);
+//     });
+// }
 
 
 function startGame() {

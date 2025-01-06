@@ -1,1 +1,1 @@
-# from .djangoProject import run_app
+from .djangoProject import run_app
