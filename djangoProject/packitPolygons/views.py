@@ -3,7 +3,7 @@ from django.shortcuts import render
 import json
 from .models import Game
 import polygonal_packit.game_core.frontend_interface as packit
-# from .ai_players_registry import AIPlayerRegistry
+from .ai_players_registry import AIPlayerRegistry
 # print("Registry state in view:", AIPlayerRegistry.get_players())
 from django.core.cache import cache
 # players = cache.get("ai_players", {})
@@ -16,13 +16,6 @@ def hexagon(request):
 
 
 def index(request):
-    # ai_players = AIPlayerRegistry.get_players()
-    players = cache.get("ai_players", {})
-
-    print("Players in views:", players)
-
-    # You can now access the players as a dictionary
-    # player_names = list(ai_players.keys())
     return render(request, 'packitPolygons/index.html')
 
 
@@ -45,7 +38,12 @@ def start_new_game(request):
     if request.method == 'POST':
         data = json.loads(request.body)
         return JsonResponse(
-            packit.start_new_game(data['board_size'], data['game_mode'], data['ai_mode'], data['ai_starts'])
+            packit.start_new_game(data['board_size'],
+                                  data['game_mode'],
+                                  data['ai_mode'],
+                                  data['ai_starts'],
+                                  AIPlayerRegistry.get_players()
+                                  )
         )
 
 

@@ -477,7 +477,7 @@ function startGame() {
     toggleClicks(true);
     let winnerHeader = document.getElementById('winner-header');
     if (aiMode && aiStarts) {
-        setTimeout(() => {winnerHeader.innerHTML = 'Loading model';}, 0);
+        setTimeout(() => {winnerHeader.innerHTML = 'Loading model...';}, 0);
     }
 
     const response = fetch( '/start_game/', {

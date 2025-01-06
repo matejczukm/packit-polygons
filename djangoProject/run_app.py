@@ -5,10 +5,10 @@
 # execute_from_command_line(['manage.py', 'runserver', '127.0.0.1:8000'])
 
 import djangoProject
+from polygonal_packit.alpha_zero_general.PackitAIPlayer import AIPlayer
 if __name__ == '__main__':
     d = {
-        'eee': 'eff',
-        'defe': 'sss'
+        'triangular3': AIPlayer(3, 'triangular', local=True, local_folder="C:/Users/piotr/Desktop/inzynierka/packit_polygons/djangoProject/model", local_filename='best_cpuct_5.pth.tar'),
+        'triangular5': AIPlayer(5, 'triangular'),
     }
-    p = djangoProject.run_app(d, verbose=1)
-    print(p)
+    p = djangoProject.run_app(d)
