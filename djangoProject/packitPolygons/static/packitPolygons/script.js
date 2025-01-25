@@ -333,6 +333,7 @@ function getFullInformationBoard() {
 }
 
 function revertMove() {
+    if (confirmMoveButton._disabled) return;
     for(let i=0; i < moveMatrix.length; i++) {
         for(let j = 0; j<moveMatrix[i].length; j++) {
             if (moveMatrix[i][j]) {
