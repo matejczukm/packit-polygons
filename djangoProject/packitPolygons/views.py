@@ -2,7 +2,7 @@ from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
 import json
 import polygonal_packit.game_core.frontend_interface as packit
-# from .ai_players_registry import AIPlayerRegistry
+from .ai_players_registry import AIPlayerRegistry
 
 
 def hexagon(request):
@@ -16,12 +16,13 @@ def index(request):
 def start_new_game(request):
     if request.method == 'POST':
         data = json.loads(request.body)
+        print(AIPlayerRegistry.get_players())
         return JsonResponse(
             packit.start_new_game(data['board_size'],
                                   data['game_mode'],
                                   data['ai_mode'],
                                   data['ai_starts'],
-                                  # AIPlayerRegistry.get_players()
+                                  AIPlayerRegistry.get_players()
                                   )
         )
 
