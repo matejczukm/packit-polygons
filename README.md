@@ -26,11 +26,11 @@ The game is played on a hexagonal grid, costricted into the shape of a quasi-hex
 2. The tiles have to be **approximately convex shapes** (a line segment between any two centers of the covered hexes lies entirely in the interior of the tile).
 
 ## Implementation
-The games are designed mainly to work with [this general AlphaZero implementation](https://github.com/suragnair/alpha-zero-general), but a UI has also been added. The games and a model training framework are also available as a pip package:
+The games are designed mainly to work with [this general AlphaZero implementation](https://github.com/suragnair/alpha-zero-general), but an UI has also been added. The games, a model training framework and pretrained models ([hosted on HuggingFace](https://huggingface.co/lgfn/packit-polygons-models/tree/main)) are also available in our polygonal-packit pip package:
 ```pip install polygonal-packit```
 A hosted web application that allowed playing 1v1 or against AI agents is currently unavailable.
 
-### AI agents
+## AI agents
 We used Google Deepmind's AlphaZero algorithm for training our game models. We are extremely thankful to the authors of [this general implementation of the algorithm](https://github.com/suragnair/alpha-zero-general) that made it possible.
 As there is no expert knowledge or expert players available for our games, we decided to set the goals of model training utilising the conclusions of Zermelo's theorem. According to the theorem, under a number of constraints that our games satisfy, one of the players (starting or non-starting) has a perfect winning strategy. This meant that for our models to be considered "good" at the game, they would have to win close to 100% of games in one starting configuration, and as much as possible in the other configuration.
 We tested the models against random agents, minimax algorithm (with depth constraints due to complexity) and human players. The results for selected variants and board sizes are presented below:
@@ -67,3 +67,9 @@ We tested the models against random agents, minimax algorithm (with depth constr
 | Hexagonal 4 | 12/19 | 13/16 | 71% |
 | Hexagonal 5 | 8/10 | 6/6 | 88% |
 | Hexagonal 6 | 3/7 | 7/8 | 67% |
+
+The models clearly show better performance in one of the starting configurations (especially for smaller, less complex variants). For games against humans, the game tree was built anew for each session, which resulted in more exploration and, consequently, worse results. However, in longer sessions (where the game tree was better established) the models had a significant advantage.
+
+## Contributors
+[Piotr Kosakowski](https://github.com/piotr-kosakowski) designed the UI, web app, pip package and HuggingFac
+[Michał Matejczuk](https://github.com/matejczukm) implemented the games, trained the models and performed tests
