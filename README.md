@@ -73,5 +73,7 @@ We tested the models against random agents, minimax algorithm (with depth constr
 The models clearly show better performance in one of the starting configurations (especially for smaller, less complex variants). For games against humans, the game tree was built anew for each session, which resulted in more exploration and, consequently, worse results. However, in longer sessions (where the game tree was better established) the models had a significant advantage.
 
 ## Contributors
-[Piotr Kosakowski](https://github.com/piotr-kosakowski) designed the UI, web app, pip package and HuggingFac
-[Michał Matejczuk](https://github.com/matejczukm) implemented the games, trained the models and performed tests
+
+[Piotr Kosakowski](https://github.com/piotr-kosakowski) designed the UI, web app and pip package.
+
+[Michał Matejczuk](https://github.com/matejczukm) implemented the games, trained the models and performed tests.
