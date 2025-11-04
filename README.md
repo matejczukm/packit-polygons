@@ -36,6 +36,7 @@ As there is no expert knowledge or expert players available for our games, we de
 We tested the models against random agents, minimax algorithm (with depth constraints due to complexity) and human players. The results for selected variants and board sizes are presented below:
 
 1. Against a random agents:
+
 | Board Type | Win rate when starting | Win rate when not starting | Total win rate |
 | :--- | :---: | :---: | :---: |
 | Triangular 4 | 46% | 100% | 73% |
@@ -45,7 +46,8 @@ We tested the models against random agents, minimax algorithm (with depth constr
 | Hexagonal 5 | 66% | 96% | 81% |
 | Hexagonal 6 | 82% | 88% | 85% |
 
-2. Against minimax (depth in parentheses)
+2. Against minimax (depth in parentheses):
+
 | Board Type | Win rate when starting | Win rate when not starting | Total win rate |
 | :--- | :---: | :---: | :---: |
 | Triangular 4 (3) | 0% | 100% | 50% |
@@ -55,7 +57,8 @@ We tested the models against random agents, minimax algorithm (with depth constr
 | Hexagonal 5 (2) | 76% | 92% | 84% |
 | Hexagonal 6 (1) | 50% | 74% | 62% |
 
-3. Against human players
+3. Against human players:
+
 | Board Type | Win rate when starting | Win rate when not starting | Total win rate |
 | :--- | :---: | :---: | :---: |
 | Triangular 4 | 17/38 | 15/15 | 60% |
