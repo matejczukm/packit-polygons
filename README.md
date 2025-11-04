@@ -27,7 +27,9 @@ The game is played on a hexagonal grid, costricted into the shape of a quasi-hex
 
 ## Implementation
 The games are designed mainly to work with [this general AlphaZero implementation](https://github.com/suragnair/alpha-zero-general), but an UI has also been added. The games, a model training framework and pretrained models ([hosted on HuggingFace](https://huggingface.co/lgfn/packit-polygons-models/tree/main)) are also available in our polygonal-packit pip package:
+
 ```pip install polygonal-packit```
+
 A hosted web application that allowed playing 1v1 or against AI agents is currently unavailable.
 
 ## AI agents
